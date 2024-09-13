@@ -6,6 +6,11 @@
   <title>BAWA KHAN DESIGN STUDIO</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="shortcut icon" href="/assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/assets/site.webmanifest" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -3057,23 +3062,13 @@
   <header class="dashboard-header flex flex-wrap justify-between items-center">
     <div class="flex items-center">
       <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-4">
-        <i class="fas fa-user-shield text-2xl text-accent"></i>
+        <img
+        src="/assets/logo.png"
+        alt="Bawa Khan Design Studio logo"
+        class="w-full h-full object-cover"
+      />
       </div>
       <h1 class="text-3xl font-bold text-white uppercase">SIR ATIF BAWA</h1>
-    </div>
-    <div class="flex space-x-2">
-      <template x-for="emp in employees" :key="emp">
-        <button
-          @click="toggleStatus(emp)"
-          class="px-5 py-2.5 rounded-xl shadow-lg transition-all flex items-center uppercase"
-          :class="status[emp]==='BUSY'
-                    ? 'bg-danger hover:bg-danger-600 text-white'
-                    : 'bg-success hover:bg-success-600 text-white'"
-        >
-          <span class="status-indicator" :class="status[emp]==='BUSY' ? 'status-busy' : 'status-free'"></span>
-          <span class="font-semibold" x-text="`${emp}: ${status[emp]}`"></span>
-        </button>
-      </template>
     </div>
   </header>
 
