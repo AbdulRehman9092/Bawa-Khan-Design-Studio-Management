@@ -1,112 +1,1499 @@
 <!DOCTYPE html>
-<html lang="en" x-data="ownerApp()" x-init="init()">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OWNER DASHBOARD</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAWA KHAN DESIGN STUDIO</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+            secondary: '#8b5cf6',
+            light: '#f8fafc',
+            dark: '#0f172a'
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
+      min-height: 100vh;
+    }
+    
+    .dashboard-container {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    
+    .dashboard-active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .task-card {
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(241, 245, 249, 0.8);
+      box-shadow: 0 8px 32px rgba(15, 23, 42, 0.05);
+    }
+    
+    .task-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 36px rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+    
+    .status-badge {
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .tab-button {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .tab-button::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #6366f1;
+      transform: translateY(5px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .tab-button.active::after {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .glowing-border {
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    }
+    
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .pulse-slow {
+      animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(241, 245, 249, 0.8);
+      box-shadow: 0 8px 32px rgba(15, 23, 42, 0.05);
+    }
+    
+    .hue-rotate {
+      animation: hue-rotate 12s linear infinite;
+    }
+    
+    @keyframes hue-rotate {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    
+    .edit-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .edit-btn:hover {
+      transform: rotate(-10deg) scale(1.1);
+      color: #6366f1;
+    }
+    
+    .wave-pattern {
+      background: radial-gradient(circle, transparent 20%, #f8fafc 20%, #f8fafc 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #f8fafc 20%, #f8fafc 80%, transparent 80%, transparent) 50px 50px, linear-gradient(#e0e7ff 4px, transparent 4px) 0 -2px, linear-gradient(90deg, #e0e7ff 4px, transparent 4px) -2px 0;
+      background-size: 100px 100px, 100px 100px, 50px 50px, 50px 50px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen">
-  <header class="bg-white p-6 shadow">
-    <h1 class="text-3xl font-bold uppercase">OWNER DASHBOARD</h1>
-  </header>
+<body class="min-h-screen flex flex-col wave-pattern" x-data="mainApp()">
+  <!-- User Selection Modal -->
+  <div x-show="showUserSelect" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-2xl shadow-2xl p-8 w-full max-w-md animate__animated animate__zoomIn">
+      <div class="text-center mb-8">
+        <div class="inline-block bg-gradient-to-r from-primary to-secondary p-1 rounded-full mb-6 floating">
+          <div class="bg-white rounded-full p-4">
+            <i class="fas fa-tasks text-4xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
+          </div>
+        </div>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Who are you?</h2>
+        <p class="text-gray-600">Select your dashboard to begin</p>
+      </div>
+      <div class="grid grid-cols-1 gap-4">
+        <button @click="selectUser('ABUZAR')" class="px-6 py-4 bg-gradient-to-r from-indigo-500 to-indigo-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
+          <i class="fas fa-user-tie text-xl"></i>
+          <span class="text-xl font-bold">ABUZAR</span>
+        </button>
+        <button @click="selectUser('KAMRAN')" class="px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
+          <i class="fas fa-user-graduate text-xl"></i>
+          <span class="text-xl font-bold">KAMRAN</span>
+        </button>
+        <button @click="selectUser('OWNER')" class="px-6 py-4 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
+          <i class="fas fa-crown text-xl"></i>
+          <span class="text-xl font-bold">OWNER</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-  <nav class="bg-white mt-4 mx-auto px-6 py-4 rounded-lg shadow w-full md:max-w-5xl flex space-x-4 uppercase">
-    <button @click="tab='today'"  :class="tab==='today' ? 'border-b-2 border-indigo-500' : ''">TODAY'S TASKS</button>
-    <button @click="tab='active'" :class="tab==='active'? 'border-b-2 border-indigo-500':''">ACTIVE TASKS</button>
-    <button @click="tab='done'"   :class="tab==='done'?   'border-b-2 border-indigo-500':''">TASKS DONE</button>
-  </nav>
+  <!-- ABUZAR Dashboard -->
+  <div id="ABUZAR_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'ABUZAR'}">
+    <header class="bg-gradient-to-r from-indigo-600 to-indigo-800 shadow-lg p-6 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="bg-white p-2 rounded-full">
+          <i class="fas fa-user-tie text-indigo-600 text-2xl"></i>
+        </div>
+        <h1 class="text-4xl font-bold text-white uppercase tracking-wide">ABUZAR</h1>
+      </div>
+      <button @click="dashboards.ABUZAR.toggleStatus()" class="px-5 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all uppercase font-semibold flex items-center gap-2"
+              :class="dashboards.ABUZAR.status === 'BUSY' ? 'bg-red-100 text-red-800 hover:bg-red-200' : 'bg-green-100 text-green-800 hover:bg-green-200'">
+        <i class="fas" :class="dashboards.ABUZAR.status === 'BUSY' ? 'fa-hourglass-half' : 'fa-check-circle'"></i>
+        <span x-text="dashboards.ABUZAR.status"></span>
+      </button>
+    </header>
 
-  <main class="mt-6 mx-auto w-full md:max-w-5xl p-4">
-    <!-- TODAY -->
-    <section x-show="tab==='today'" x-transition>
-      <template x-for="(jobs, emp) in data.today" :key="emp">
-        <div class="mb-6">
-          <h2 class="text-2xl font-semibold uppercase" x-text="emp"></h2>
-          <template x-for="job in jobs" :key="job.id">
-            <div class="bg-white p-4 rounded-lg shadow mb-2">
-              <div class="flex justify-between">
+    <nav class="glass-panel mt-6 mx-4 rounded-2xl shadow-md p-4 w-auto md:max-w-4xl flex flex-wrap gap-4 uppercase">
+      <button @click="dashboards.ABUZAR.tab='today'" 
+              :class="{'active text-primary font-bold': dashboards.ABUZAR.tab==='today'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-sun mr-2"></i>TODAY TASKS
+      </button>
+      <button @click="dashboards.ABUZAR.tab='active'" 
+              :class="{'active text-primary font-bold': dashboards.ABUZAR.tab==='active'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-list-check mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="dashboards.ABUZAR.tab='done'" 
+              :class="{'active text-primary font-bold': dashboards.ABUZAR.tab==='done'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-6 mx-auto w-full md:max-w-4xl p-4">
+      <!-- TODAY TASKS -->
+      <section x-show="dashboards.ABUZAR.tab==='today'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800 uppercase flex items-center gap-2">
+            <i class="fas fa-sun text-yellow-500"></i>TODAY'S TASKS
+          </h2>
+          <button @click="dashboards.ABUZAR.showTodayModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition-all flex items-center gap-2">
+            <i class="fas fa-plus"></i>SELECT TASKS
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ABUZAR.todayTasks.length === 0">
+          <div class="glass-panel rounded-2xl p-8 text-center">
+            <div class="inline-block bg-gradient-to-r from-primary to-secondary p-1.5 rounded-full mb-4">
+              <div class="bg-white rounded-full p-3">
+                <i class="fas fa-inbox text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
+              </div>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No tasks for today</h3>
+            <p class="text-gray-600 mb-4">Select tasks to get started</p>
+            <button @click="dashboards.ABUZAR.showTodayModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg shadow hover:shadow-lg transition">
+              Select Tasks
+            </button>
+          </div>
+        </template>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <template x-for="job in dashboards.ABUZAR.todayTasks" :key="job.id">
+            <div class="task-card rounded-2xl p-5">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex justify-between items-start">
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <span class="status-badge px-3 py-1 rounded-full text-xs font-semibold"
+                        :class="{
+                            'bg-green-100 text-green-800': job.payment === 'PAID',
+                            'bg-yellow-100 text-yellow-800': job.payment === 'NOT PAID',
+                            'bg-gray-100 text-gray-800': job.payment === 'DON\'T KNOW'
+                        }">
+                        PAYMENT: <span x-text="job.payment"></span>
+                    </span>
+                  </div>
+                  <p class="text-gray-600 mt-2 mb-3">
+                    <span class="cursor-pointer hover:text-primary transition" 
+                          @click="dashboards.ABUZAR.showDesc(job)" 
+                          x-text="job.description.slice(0,40)+(job.description.length > 40 ? '...' : '')"></span>
+                  </p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <i class="fas fa-calendar-day mr-2"></i>
+                    <span>Deadline: <span class="font-medium" x-text="job.deadline"></span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="dashboards.ABUZAR.tab==='active'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800 uppercase flex items-center gap-2">
+            <i class="fas fa-list-check text-blue-500"></i>ACTIVE TASKS
+          </h2>
+          <button @click="dashboards.ABUZAR.showAddModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition flex items-center gap-2">
+            <i class="fas fa-plus"></i>ADD TASK
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ABUZAR.activeTasks().length === 0">
+          <div class="glass-panel rounded-2xl p-8 text-center">
+            <div class="inline-block bg-gradient-to-r from-primary to-secondary p-1.5 rounded-full mb-4">
+              <div class="bg-white rounded-full p-3">
+                <i class="fas fa-check-circle text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
+              </div>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No active tasks</h3>
+            <p class="text-gray-600 mb-4">Add a new task to get started</p>
+            <button @click="dashboards.ABUZAR.showAddModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg shadow hover:shadow-lg transition">
+              Add Task
+            </button>
+          </div>
+        </template>
+        
+        <div class="grid grid-cols-1 gap-4">
+          <template x-for="job in dashboards.ABUZAR.activeTasks()" :key="job.id">
+            <div class="task-card rounded-2xl p-5">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex justify-between items-start mb-2">
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <button @click="dashboards.ABUZAR.editTask = {...job}; dashboards.ABUZAR.showEditModal=true" 
+                            class="edit-btn text-gray-500 hover:text-primary p-2 rounded-full">
+                      <i class="fas fa-pencil-alt"></i>
+                    </button>
+                  </div>
+                  <p class="text-gray-600 mb-4">
+                    <span class="cursor-pointer hover:text-primary transition" 
+                          @click="dashboards.ABUZAR.showDesc(job)" 
+                          x-text="job.description.slice(0,60)+(job.description.length > 60 ? '...' : '')"></span>
+                  </p>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">CREATED DATE</label>
+                      <input type="date" x-model="job.created" @change="dashboards.ABUZAR.save()" 
+                             class="w-full border border-gray-200 p-2 rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                    </div>
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">DEADLINE</label>
+                      <input type="date" x-model="job.deadline" @change="dashboards.ABUZAR.save()" 
+                             class="w-full border border-gray-200 p-2 rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex flex-wrap justify-between items-center mt-4 pt-4 border-t border-gray-100">
+                <div class="flex items-center gap-3">
+                  <button @click="dashboards.ABUZAR.markDoneById(job.id)" class="px-3 py-1.5 bg-green-500 text-white rounded-lg shadow hover:shadow-lg transition flex items-center gap-2">
+                    <i class="fas fa-check"></i>MARK DONE
+                  </button>
+                  
+                  <div class="flex items-center">
+                    <span class="text-sm uppercase text-gray-500 font-medium mr-2">REVISIONS</span>
+                    <div class="inline-flex bg-gray-100 rounded-lg">
+                      <button @click="dashboards.ABUZAR.changeRevisionById(job.id,-1)" class="px-3 py-1 bg-gray-200 rounded-l-lg hover:bg-gray-300">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <span class="px-3 py-1 border-t border-b font-medium" x-text="job.revisions"></span>
+                      <button @click="dashboards.ABUZAR.changeRevisionById(job.id,1)" class="px-3 py-1 bg-gray-200 rounded-r-lg hover:bg-gray-300">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-3 mt-2 md:mt-0">
+                  <div>
+                    <select x-model="job.payment" @change="dashboards.ABUZAR.save()" class="px-3 py-1.5 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option value="NOT PAID">NOT PAID</option>
+                      <option value="PAID">PAID</option>
+                      <option value="DON'T KNOW">DON'T KNOW</option>
+                    </select>
+                  </div>
+                  <button @click="dashboards.ABUZAR.removeById(job.id)" class="text-red-500 hover:text-red-700 p-2">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="dashboards.ABUZAR.tab==='done'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <h2 class="text-2xl font-bold text-gray-800 uppercase mb-6 flex items-center gap-2">
+          <i class="fas fa-check-circle text-green-500"></i>TASKS DONE
+        </h2>
+        
+        <template x-if="dashboards.ABUZAR.doneTasks().length === 0">
+          <div class="glass-panel rounded-2xl p-8 text-center">
+            <div class="inline-block bg-gradient-to-r from-primary to-secondary p-1.5 rounded-full mb-4">
+              <div class="bg-white rounded-full p-3">
+                <i class="fas fa-check-double text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
+              </div>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No completed tasks yet</h3>
+            <p class="text-gray-600">Start marking tasks as done to see them here</p>
+          </div>
+        </template>
+        
+        <div class="grid grid-cols-1 gap-4">
+          <template x-for="job in dashboards.ABUZAR.doneTasks()" :key="job.id">
+            <div class="task-card rounded-2xl p-5">
+              <div class="flex justify-between items-start">
                 <div>
-                  <h4 class="font-bold uppercase" x-text="job.name"></h4>
-                  <p x-text="job.description"></p>
+                  <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                  <p class="text-sm text-gray-500 mt-2"><i class="fas fa-calendar-check mr-2"></i>DONE ON: <span class="font-medium" x-text="job.done"></span></p>
+                  <p class="text-sm text-gray-500 mt-1"><i class="fas fa-hourglass-end mr-2"></i>DEADLINE: <span class="font-medium" x-text="job.deadline"></span></p>
+                  <p class="text-sm text-gray-500 mt-1"><i class="fas fa-sync-alt mr-2"></i>REVISIONS: <span class="font-medium" x-text="job.revisions"></span></p>
+                  <p class="text-sm text-gray-500 mt-1"><i class="fas fa-money-bill-wave mr-2"></i>PAYMENT: 
+                    <span class="font-medium" 
+                          :class="{
+                            'text-green-600': job.payment === 'PAID',
+                            'text-yellow-600': job.payment === 'NOT PAID',
+                            'text-gray-600': job.payment === 'DON\'T KNOW'
+                          }"
+                          PAYMENT: <span x-text="job.payment"></span>
+                    </span>
+                  </p>
+                  <p class="mt-3 text-gray-600" x-text="job.description"></p>
                 </div>
-                <p class="text-sm uppercase">Deadline: <span x-text="job.deadline"></span></p>
+                <div class="ml-4">
+                  <button @click="dashboards.ABUZAR.reviseAgain(job.id)" class="px-3 py-1.5 bg-yellow-500 text-white rounded-lg shadow hover:shadow-lg transition flex items-center gap-2">
+                    <i class="fas fa-redo"></i>REVISE
+                  </button>
+                </div>
               </div>
             </div>
           </template>
         </div>
-      </template>
-    </section>
+      </section>
+    </main>
 
-    <!-- ACTIVE -->
-    <section x-show="tab==='active'" x-transition>
-      <template x-for="(jobs, emp) in data.active" :key="emp">
-        <div class="mb-6">
-          <h2 class="text-2xl font-semibold uppercase" x-text="emp"></h2>
-          <template x-for="job in jobs" :key="job.id">
-            <div class="bg-white p-4 rounded-lg shadow mb-2">
-              <div class="flex justify-between">
+    <!-- MODALS for ABUZAR -->
+    <div x-show="dashboards.ABUZAR.showAddModal || dashboards.ABUZAR.showDescModal || dashboards.ABUZAR.showTodayModal || dashboards.ABUZAR.showEditModal" 
+         class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-40 p-4">
+      <div class="glass-panel rounded-2xl shadow-xl w-full max-w-md animate__animated animate__zoomIn p-6">
+        <!-- ADD TASK -->
+        <template x-if="dashboards.ABUZAR.showAddModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-plus-circle text-primary"></i>ADD NEW TASK
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">TASK NAME</label>
+                <input x-model="dashboards.ABUZAR.newJob.name" type="text" placeholder="Enter task name" 
+                       class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+              </div>
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DESCRIPTION</label>
+                <textarea x-model="dashboards.ABUZAR.newJob.description" placeholder="Enter description" 
+                          class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent h-32"></textarea>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h4 class="font-bold uppercase" x-text="job.name"></h4>
-                  <p x-text="job.description"></p>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">CREATION DATE</label>
+                  <input type="date" x-model="dashboards.ABUZAR.newJob.created" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
                 </div>
-                <div class="text-right space-y-1">
-                  <p class="text-sm uppercase">Deadline: <span x-text="job.deadline"></span></p>
-                  <label class="text-sm uppercase">PAYMENT</label>
-                  <span x-text="job.payment"></span>
+                <div>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DEADLINE</label>
+                  <input x-model="dashboards.ABUZAR.newJob.deadline" type="date" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
                 </div>
               </div>
             </div>
-          </template>
-        </div>
-      </template>
-    </section>
+            <div class="flex justify-end space-x-3 mt-6">
+              <button @click="dashboards.ABUZAR.addJob()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                ADD TASK
+              </button>
+              <button @click="dashboards.ABUZAR.closeModals()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 transition">
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </template>
+        
+        <!-- EDIT TASK -->
+        <template x-if="dashboards.ABUZAR.showEditModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-edit text-primary"></i>EDIT TASK
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">TASK NAME</label>
+                <input x-model="dashboards.ABUZAR.editTask.name" type="text" placeholder="Enter task name" 
+                       class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+              </div>
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DESCRIPTION</label>
+                <textarea x-model="dashboards.ABUZAR.editTask.description" placeholder="Enter description" 
+                          class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent h-32"></textarea>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">CREATION DATE</label>
+                  <input type="date" x-model="dashboards.ABUZAR.editTask.created" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DEADLINE</label>
+                  <input x-model="dashboards.ABUZAR.editTask.deadline" type="date" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+              <button @click="dashboards.ABUZAR.updateTask()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                UPDATE TASK
+              </button>
+              <button @click="dashboards.ABUZAR.closeModals()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 transition">
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </template>
 
-    <!-- DONE -->
-    <section x-show="tab==='done'" x-transition>
-      <template x-for="(jobs, emp) in data.done" :key="emp">
-        <div class="mb-6">
-          <h2 class="text-2xl font-semibold uppercase" x-text="emp"></h2>
-          <template x-for="job in jobs" :key="job.id">
-            <div class="bg-white p-4 rounded-lg shadow mb-2">
-              <div class="flex justify-between">
-                <span class="font-bold uppercase" x-text="job.name"></span>
-                <p class="text-sm uppercase">Done on: <span x-text="job.timestamp.slice(0,10)"></span></p>
+        <!-- DESCRIPTION POPUP -->
+        <template x-if="dashboards.ABUZAR.showDescModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-file-alt text-primary"></i>DESCRIPTION
+            </h3>
+            <div class="bg-gray-50 rounded-xl p-4 max-h-60 overflow-y-auto">
+              <p x-text="dashboards.ABUZAR.descContent" class="text-gray-700 whitespace-pre-line"></p>
+            </div>
+            <div class="flex justify-end mt-6">
+              <button @click="dashboards.ABUZAR.closeModals()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                CLOSE
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- TODAY SELECT -->
+        <template x-if="dashboards.ABUZAR.showTodayModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-calendar-day text-primary"></i>SELECT TODAY'S TASKS
+            </h3>
+            <div class="max-h-96 overflow-y-auto pr-2">
+              <template x-for="job in dashboards.ABUZAR.activeTasks()" :key="job.id">
+                <div class="flex items-center mb-3 p-3 rounded-lg hover:bg-indigo-50 transition" 
+                     @click="dashboards.ABUZAR.toggleSelection(job.id)">
+                  <input type="checkbox" :value="job.id" x-model="dashboards.ABUZAR.selectedToday" class="mr-3 h-5 w-5 text-primary rounded focus:ring-primary" />
+                  <div>
+                    <div class="font-medium" x-text="job.name"></div>
+                    <div class="text-sm text-gray-500" x-text="job.description.slice(0, 40) + '...'"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+              <button @click="dashboards.ABUZAR.addTodayTasks()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                ADD SELECTED
+              </button>
+              <button @click="dashboards.ABUZAR.closeModals()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 transition">
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- KAMRAN Dashboard -->
+  <div id="KAMRAN_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'KAMRAN'}">
+    <header class="bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg p-6 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="bg-white p-2 rounded-full">
+          <i class="fas fa-user-graduate text-blue-600 text-2xl"></i>
+        </div>
+        <h1 class="text-4xl font-bold text-white uppercase tracking-wide">KAMRAN</h1>
+      </div>
+      <button @click="dashboards.KAMRAN.toggleStatus()" class="px-5 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all uppercase font-semibold flex items-center gap-2"
+              :class="dashboards.KAMRAN.status === 'BUSY' ? 'bg-red-100 text-red-800 hover:bg-red-200' : 'bg-green-100 text-green-800 hover:bg-green-200'">
+        <i class="fas" :class="dashboards.KAMRAN.status === 'BUSY' ? 'fa-hourglass-half' : 'fa-check-circle'"></i>
+        <span x-text="dashboards.KAMRAN.status"></span>
+      </button>
+    </header>
+
+    <nav class="glass-panel mt-6 mx-4 rounded-2xl shadow-md p-4 w-auto md:max-w-4xl flex flex-wrap gap-4 uppercase">
+      <button @click="dashboards.KAMRAN.tab='today'" 
+              :class="{'active text-primary font-bold': dashboards.KAMRAN.tab==='today'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-sun mr-2"></i>TODAY TASKS
+      </button>
+      <button @click="dashboards.KAMRAN.tab='active'" 
+              :class="{'active text-primary font-bold': dashboards.KAMRAN.tab==='active'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-list-check mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="dashboards.KAMRAN.tab='done'" 
+              :class="{'active text-primary font-bold': dashboards.KAMRAN.tab==='done'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-6 mx-auto w-full md:max-w-4xl p-4">
+      <!-- TODAY TASKS -->
+      <section x-show="dashboards.KAMRAN.tab==='today'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800 uppercase flex items-center gap-2">
+            <i class="fas fa-sun text-yellow-500"></i>TODAY'S TASKS
+          </h2>
+          <button @click="dashboards.KAMRAN.showTodayModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition-all flex items-center gap-2">
+            <i class="fas fa-plus"></i>SELECT TASKS
+          </button>
+        </div>
+        
+        <template x-if="dashboards.KAMRAN.todayTasks.length === 0">
+          <div class="glass-panel rounded-2xl p-8 text-center">
+            <div class="inline-block bg-gradient-to-r from-primary to-secondary p-1.5 rounded-full mb-4">
+              <div class="bg-white rounded-full p-3">
+                <i class="fas fa-inbox text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
               </div>
-              <p x-text="job.description"></p>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No tasks for today</h3>
+            <p class="text-gray-600 mb-4">Select tasks to get started</p>
+            <button @click="dashboards.KAMRAN.showTodayModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg shadow hover:shadow-lg transition">
+              Select Tasks
+            </button>
+          </div>
+        </template>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <template x-for="job in dashboards.KAMRAN.todayTasks" :key="job.id">
+            <div class="task-card rounded-2xl p-5">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex justify-between items-start">
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <span class="status-badge px-3 py-1 rounded-full text-xs font-semibold"
+                          :class="{
+                            'bg-green-100 text-green-800': job.payment === 'PAID',
+                            'bg-yellow-100 text-yellow-800': job.payment === 'NOT PAID',
+                            'bg-gray-100 text-gray-800': job.payment === 'DON\'T KNOW'
+                          }"
+                          PAYMENT: <span x-text="job.payment"></span>
+                        </span>
+                  </div>
+                  <p class="text-gray-600 mt-2 mb-3">
+                    <span class="cursor-pointer hover:text-primary transition" 
+                          @click="dashboards.KAMRAN.showDesc(job)" 
+                          x-text="job.description.slice(0,40)+(job.description.length > 40 ? '...' : '')"></span>
+                  </p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <i class="fas fa-calendar-day mr-2"></i>
+                    <span>Deadline: <span class="font-medium" x-text="job.deadline"></span></span>
+                  </div>
+                </div>
+              </div>
             </div>
           </template>
         </div>
-      </template>
-    </section>
-  </main>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="dashboards.KAMRAN.tab==='active'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800 uppercase flex items-center gap-2">
+            <i class="fas fa-list-check text-blue-500"></i>ACTIVE TASKS
+          </h2>
+          <button @click="dashboards.KAMRAN.showAddModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition flex items-center gap-2">
+            <i class="fas fa-plus"></i>ADD TASK
+          </button>
+        </div>
+        
+        <template x-if="dashboards.KAMRAN.activeTasks().length === 0">
+          <div class="glass-panel rounded-2xl p-8 text-center">
+            <div class="inline-block bg-gradient-to-r from-primary to-secondary p-1.5 rounded-full mb-4">
+              <div class="bg-white rounded-full p-3">
+                <i class="fas fa-check-circle text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
+              </div>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No active tasks</h3>
+            <p class="text-gray-600 mb-4">Add a new task to get started</p>
+            <button @click="dashboards.KAMRAN.showAddModal=true" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg shadow hover:shadow-lg transition">
+              Add Task
+            </button>
+          </div>
+        </template>
+        
+        <div class="grid grid-cols-1 gap-4">
+          <template x-for="job in dashboards.KAMRAN.activeTasks()" :key="job.id">
+            <div class="task-card rounded-2xl p-5">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex justify-between items-start mb-2">
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <button @click="dashboards.KAMRAN.editTask = {...job}; dashboards.KAMRAN.showEditModal=true" 
+                            class="edit-btn text-gray-500 hover:text-primary p-2 rounded-full">
+                      <i class="fas fa-pencil-alt"></i>
+                    </button>
+                  </div>
+                  <p class="text-gray-600 mb-4">
+                    <span class="cursor-pointer hover:text-primary transition" 
+                          @click="dashboards.KAMRAN.showDesc(job)" 
+                          x-text="job.description.slice(0,60)+(job.description.length > 60 ? '...' : '')"></span>
+                  </p>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">CREATED DATE</label>
+                      <input type="date" x-model="job.created" @change="dashboards.KAMRAN.save()" 
+                             class="w-full border border-gray-200 p-2 rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                    </div>
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">DEADLINE</label>
+                      <input type="date" x-model="job.deadline" @change="dashboards.KAMRAN.save()" 
+                             class="w-full border border-gray-200 p-2 rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex flex-wrap justify-between items-center mt-4 pt-4 border-t border-gray-100">
+                <div class="flex items-center gap-3">
+                  <button @click="dashboards.KAMRAN.markDoneById(job.id)" class="px-3 py-1.5 bg-green-500 text-white rounded-lg shadow hover:shadow-lg transition flex items-center gap-2">
+                    <i class="fas fa-check"></i>MARK DONE
+                  </button>
+                  
+                  <div class="flex items-center">
+                    <span class="text-sm uppercase text-gray-500 font-medium mr-2">REVISIONS</span>
+                    <div class="inline-flex bg-gray-100 rounded-lg">
+                      <button @click="dashboards.KAMRAN.changeRevisionById(job.id,-1)" class="px-3 py-1 bg-gray-200 rounded-l-lg hover:bg-gray-300">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <span class="px-3 py-1 border-t border-b font-medium" x-text="job.revisions"></span>
+                      <button @click="dashboards.KAMRAN.changeRevisionById(job.id,1)" class="px-3 py-1 bg-gray-200 rounded-r-lg hover:bg-gray-300">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-3 mt-2 md:mt-0">
+                  <div>
+                    <select x-model="job.payment" @change="dashboards.KAMRAN.save()" class="px-3 py-1.5 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option value="NOT PAID">NOT PAID</option>
+                      <option value="PAID">PAID</option>
+                      <option value="DON'T KNOW">DON'T KNOW</option>
+                    </select>
+                  </div>
+                  <button @click="dashboards.KAMRAN.removeById(job.id)" class="text-red-500 hover:text-red-700 p-2">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="dashboards.KAMRAN.tab==='done'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <h2 class="text-2xl font-bold text-gray-800 uppercase mb-6 flex items-center gap-2">
+          <i class="fas fa-check-circle text-green-500"></i>TASKS DONE
+        </h2>
+        
+        <template x-if="dashboards.KAMRAN.doneTasks().length === 0">
+          <div class="glass-panel rounded-2xl p-8 text-center">
+            <div class="inline-block bg-gradient-to-r from-primary to-secondary p-1.5 rounded-full mb-4">
+              <div class="bg-white rounded-full p-3">
+                <i class="fas fa-check-double text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></i>
+              </div>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No completed tasks yet</h3>
+            <p class="text-gray-600">Start marking tasks as done to see them here</p>
+          </div>
+        </template>
+        
+        <div class="grid grid-cols-1 gap-4">
+          <template x-for="job in dashboards.KAMRAN.doneTasks()" :key="job.id">
+            <div class="task-card rounded-2xl p-5">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                  <p class="text-sm text-gray-500 mt-2"><i class="fas fa-calendar-check mr-2"></i>DONE ON: <span class="font-medium" x-text="job.done"></span></p>
+                  <p class="text-sm text-gray-500 mt-1"><i class="fas fa-hourglass-end mr-2"></i>DEADLINE: <span class="font-medium" x-text="job.deadline"></span></p>
+                  <p class="text-sm text-gray-500 mt-1"><i class="fas fa-sync-alt mr-2"></i>REVISIONS: <span class="font-medium" x-text="job.revisions"></span></p>
+                  <p class="text-sm text-gray-500 mt-1"><i class="fas fa-money-bill-wave mr-2"></i>PAYMENT: 
+                    <span class="font-medium" 
+                          :class="{
+                            'text-green-600': job.payment === 'PAID',
+                            'text-yellow-600': job.payment === 'NOT PAID',
+                            'text-gray-600': job.payment === 'DON\'T KNOW'
+                          }"
+                          PAYMENT: <span x-text="job.payment"></span>
+                        </span>
+                  </p>
+                  <p class="mt-3 text-gray-600" x-text="job.description"></p>
+                </div>
+                <div class="ml-4">
+                  <button @click="dashboards.KAMRAN.reviseAgain(job.id)" class="px-3 py-1.5 bg-yellow-500 text-white rounded-lg shadow hover:shadow-lg transition flex items-center gap-2">
+                    <i class="fas fa-redo"></i>REVISE
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </section>
+    </main>
+
+    <!-- MODALS for KAMRAN -->
+    <div x-show="dashboards.KAMRAN.showAddModal || dashboards.KAMRAN.showDescModal || dashboards.KAMRAN.showTodayModal || dashboards.KAMRAN.showEditModal" 
+         class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-40 p-4">
+      <div class="glass-panel rounded-2xl shadow-xl w-full max-w-md animate__animated animate__zoomIn p-6">
+        <!-- ADD TASK -->
+        <template x-if="dashboards.KAMRAN.showAddModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-plus-circle text-primary"></i>ADD NEW TASK
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">TASK NAME</label>
+                <input x-model="dashboards.KAMRAN.newJob.name" type="text" placeholder="Enter task name" 
+                       class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+              </div>
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DESCRIPTION</label>
+                <textarea x-model="dashboards.KAMRAN.newJob.description" placeholder="Enter description" 
+                          class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent h-32"></textarea>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">CREATION DATE</label>
+                  <input type="date" x-model="dashboards.KAMRAN.newJob.created" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DEADLINE</label>
+                  <input x-model="dashboards.KAMRAN.newJob.deadline" type="date" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+              <button @click="dashboards.KAMRAN.addJob()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                ADD TASK
+              </button>
+              <button @click="dashboards.KAMRAN.closeModals()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 transition">
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </template>
+        
+        <!-- EDIT TASK -->
+        <template x-if="dashboards.KAMRAN.showEditModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-edit text-primary"></i>EDIT TASK
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">TASK NAME</label>
+                <input x-model="dashboards.KAMRAN.editTask.name" type="text" placeholder="Enter task name" 
+                       class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+              </div>
+              <div>
+                <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DESCRIPTION</label>
+                <textarea x-model="dashboards.KAMRAN.editTask.description" placeholder="Enter description" 
+                          class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent h-32"></textarea>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">CREATION DATE</label>
+                  <input type="date" x-model="dashboards.KAMRAN.editTask.created" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                </div>
+                <div>
+                  <label class="text-sm uppercase text-gray-600 font-medium block mb-1">DEADLINE</label>
+                  <input x-model="dashboards.KAMRAN.editTask.deadline" type="date" 
+                         class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+              <button @click="dashboards.KAMRAN.updateTask()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                UPDATE TASK
+              </button>
+              <button @click="dashboards.KAMRAN.closeModals()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 transition">
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- DESCRIPTION POPUP -->
+        <template x-if="dashboards.KAMRAN.showDescModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-file-alt text-primary"></i>DESCRIPTION
+            </h3>
+            <div class="bg-gray-50 rounded-xl p-4 max-h-60 overflow-y-auto">
+              <p x-text="dashboards.KAMRAN.descContent" class="text-gray-700 whitespace-pre-line"></p>
+            </div>
+            <div class="flex justify-end mt-6">
+              <button @click="dashboards.KAMRAN.closeModals()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                CLOSE
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- TODAY SELECT -->
+        <template x-if="dashboards.KAMRAN.showTodayModal">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-calendar-day text-primary"></i>SELECT TODAY'S TASKS
+            </h3>
+            <div class="max-h-96 overflow-y-auto pr-2">
+              <template x-for="job in dashboards.KAMRAN.activeTasks()" :key="job.id">
+                <div class="flex items-center mb-3 p-3 rounded-lg hover:bg-indigo-50 transition" 
+                     @click="dashboards.KAMRAN.toggleSelection(job.id)">
+                  <input type="checkbox" :value="job.id" x-model="dashboards.KAMRAN.selectedToday" class="mr-3 h-5 w-5 text-primary rounded focus:ring-primary" />
+                  <div>
+                    <div class="font-medium" x-text="job.name"></div>
+                    <div class="text-sm text-gray-500" x-text="job.description.slice(0, 40) + '...'"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+              <button @click="dashboards.KAMRAN.addTodayTasks()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow hover:shadow-lg transition">
+                ADD SELECTED
+              </button>
+              <button @click="dashboards.KAMRAN.closeModals()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 transition">
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- OWNER Dashboard -->
+  <div id="OWNER_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'OWNER'}">
+    <header class="bg-gradient-to-r from-emerald-600 to-emerald-800 shadow-lg p-6 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="bg-white p-2 rounded-full">
+          <i class="fas fa-crown text-emerald-600 text-2xl"></i>
+        </div>
+        <h1 class="text-4xl font-bold text-white uppercase tracking-wide">OWNER DASHBOARD</h1>
+      </div>
+      <div class="flex space-x-3">
+        <button @click="ownerData.toggleStatus('ABUZAR')" 
+                class="px-4 py-2 rounded-xl shadow hover:shadow-lg transition uppercase font-semibold flex items-center gap-2"
+                :class="ownerData.getStatus('ABUZAR') === 'BUSY' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'">
+          <i class="fas" :class="ownerData.getStatus('ABUZAR') === 'BUSY' ? 'fa-hourglass-half' : 'fa-check-circle'"></i>
+          ABUZAR: <span x-text="ownerData.getStatus('ABUZAR')"></span>
+        </button>
+        <button @click="ownerData.toggleStatus('KAMRAN')" 
+                class="px-4 py-2 rounded-xl shadow hover:shadow-lg transition uppercase font-semibold flex items-center gap-2"
+                :class="ownerData.getStatus('KAMRAN') === 'BUSY' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'">
+          <i class="fas" :class="ownerData.getStatus('KAMRAN') === 'BUSY' ? 'fa-hourglass-half' : 'fa-check-circle'"></i>
+          KAMRAN: <span x-text="ownerData.getStatus('KAMRAN')"></span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="glass-panel mt-6 mx-4 rounded-2xl shadow-md p-4 w-auto md:max-w-6xl flex flex-wrap gap-4 uppercase">
+      <button @click="ownerData.tab='today'" 
+              :class="{'active text-primary font-bold': ownerData.tab==='today'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-sun mr-2"></i>TODAY'S TASKS
+      </button>
+      <button @click="ownerData.tab='active'" 
+              :class="{'active text-primary font-bold': ownerData.tab==='active'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-list-check mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="ownerData.tab='done'" 
+              :class="{'active text-primary font-bold': ownerData.tab==='done'}" 
+              class="tab-button px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-6 mx-auto w-full md:max-w-6xl p-4">
+      <!-- TODAY'S TASKS -->
+      <section x-show="ownerData.tab==='today'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <i class="fas fa-sun text-yellow-500"></i>TODAY'S TASKS
+        </h2>
+        
+        <!-- ABUZAR's Tasks -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <span class="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-3 py-1 rounded-xl flex items-center gap-2">
+                <i class="fas fa-user-tie"></i>ABUZAR
+                <span class="status-badge px-2 py-0.5 rounded-full text-xs font-semibold ml-2"
+                      :class="{
+                        'bg-green-100 text-green-800': ownerData.getStatus('ABUZAR') === 'FREE',
+                        'bg-red-100 text-red-800': ownerData.getStatus('ABUZAR') === 'BUSY'
+                      }"
+                      x-text="ownerData.getStatus('ABUZAR')"></span>
+              </span>
+            </h3>
+          </div>
+          
+          <template x-if="ownerData.getTodayTasks('ABUZAR').length === 0">
+            <div class="glass-panel rounded-2xl p-6 text-center">
+              <p class="text-gray-500">No tasks selected for today</p>
+            </div>
+          </template>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <template x-for="job in ownerData.getTodayTasks('ABUZAR')" :key="'abuzar-'+job.id">
+              <div class="task-card rounded-2xl p-5">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <p class="text-gray-600 mt-2 mb-3">
+                      <span x-text="job.description.slice(0, 50) + (job.description.length > 50 ? '...' : '')"></span>
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500">
+                      <i class="fas fa-calendar-day mr-2"></i>
+                      <span>Deadline: <span class="font-medium" x-text="job.deadline"></span></span>
+                    </div>
+                  </div>
+                  <div class="ml-4 text-center">
+                    <span class="status-badge px-3 py-1 rounded-full text-xs font-semibold"
+                          :class="{
+                            'bg-green-100 text-green-800': job.payment === 'PAID',
+                            'bg-yellow-100 text-yellow-800': job.payment === 'NOT PAID',
+                            'bg-gray-100 text-gray-800': job.payment === 'DON\'T KNOW'
+                          }"
+                          PAYMENT: <span x-text="job.payment"></span>
+                        </span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+        
+        <!-- KAMRAN's Tasks -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <span class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-xl flex items-center gap-2">
+                <i class="fas fa-user-graduate"></i>KAMRAN
+                <span class="status-badge px-2 py-0.5 rounded-full text-xs font-semibold ml-2"
+                      :class="{
+                        'bg-green-100 text-green-800': ownerData.getStatus('KAMRAN') === 'FREE',
+                        'bg-red-100 text-red-800': ownerData.getStatus('KAMRAN') === 'BUSY'
+                      }"
+                      x-text="ownerData.getStatus('KAMRAN')"></span>
+              </span>
+            </h3>
+          </div>
+          
+          <template x-if="ownerData.getTodayTasks('KAMRAN').length === 0">
+            <div class="glass-panel rounded-2xl p-6 text-center">
+              <p class="text-gray-500">No tasks selected for today</p>
+            </div>
+          </template>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <template x-for="job in ownerData.getTodayTasks('KAMRAN')" :key="'kamran-'+job.id">
+              <div class="task-card rounded-2xl p-5">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <p class="text-gray-600 mt-2 mb-3">
+                      <span x-text="job.description.slice(0, 50) + (job.description.length > 50 ? '...' : '')"></span>
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500">
+                      <i class="fas fa-calendar-day mr-2"></i>
+                      <span>Deadline: <span class="font-medium" x-text="job.deadline"></span></span>
+                    </div>
+                  </div>
+                  <div class="ml-4 text-center">
+                    <span class="status-badge px-3 py-1 rounded-full text-xs font-semibold"
+                          :class="{
+                            'bg-green-100 text-green-800': job.payment === 'PAID',
+                            'bg-yellow-100 text-yellow-800': job.payment === 'NOT PAID',
+                            'bg-gray-100 text-gray-800': job.payment === 'DON\'T KNOW'
+                          }"
+                          PAYMENT: <span x-text="job.payment"></span>
+                        </span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="ownerData.tab==='active'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <i class="fas fa-list-check text-blue-500"></i>ACTIVE TASKS
+        </h2>
+        
+        <!-- ABUZAR's Tasks -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <span class="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-3 py-1 rounded-xl flex items-center gap-2">
+              <i class="fas fa-user-tie"></i>ABUZAR
+            </span>
+          </h3>
+          
+          <template x-if="ownerData.getActiveTasks('ABUZAR').length === 0">
+            <div class="glass-panel rounded-2xl p-6 text-center">
+              <p class="text-gray-500">No active tasks</p>
+            </div>
+          </template>
+          
+          <div class="grid grid-cols-1 gap-4">
+            <template x-for="job in ownerData.getActiveTasks('ABUZAR')" :key="'abuzar-'+job.id">
+              <div class="task-card rounded-2xl p-5">
+                <div class="flex justify-between items-start">
+                  <div class="flex-1">
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <p class="text-gray-600 mt-2 mb-4">
+                      <span x-text="job.description.slice(0, 50) + (job.description.length > 50 ? '...' : '')"></span>
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="text-sm uppercase text-gray-500 font-medium block mb-1">CREATED DATE</label>
+                        <p class="font-medium" x-text="job.created"></p>
+                      </div>
+                      <div>
+                        <label class="text-sm uppercase text-gray-500 font-medium block mb-1">DEADLINE</label>
+                        <p class="font-medium" x-text="job.deadline"></p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="ml-4 min-w-[160px]">
+                    <div class="mb-3">
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">PAYMENT</label>
+                      <div class="flex items-center gap-2">
+                        <select x-model="job.payment" @change="ownerData.updateTask('ABUZAR', job.id, 'payment', job.payment)" 
+                                class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent">
+                          <option value="NOT PAID">NOT PAID</option>
+                          <option value="PAID">PAID</option>
+                          <option value="DON'T KNOW">DON'T KNOW</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">AMOUNT</label>
+                      <input type="text" x-model="job.amount" @change="ownerData.updateTask('ABUZAR', job.id, 'amount', job.amount)" 
+                             class="w-full p-2 border rounded-lg text-center" placeholder="$0.00" />
+                    </div>
+                    
+                    <div class="mt-3">
+                      <span class="text-sm uppercase text-gray-500 font-medium block mb-1">REVISIONS</span>
+                      <span class="text-lg font-bold text-center block" x-text="job.revisions"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+        
+        <!-- KAMRAN's Tasks -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <span class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-xl flex items-center gap-2">
+              <i class="fas fa-user-graduate"></i>KAMRAN
+            </span>
+          </h3>
+          
+          <template x-if="ownerData.getActiveTasks('KAMRAN').length === 0">
+            <div class="glass-panel rounded-2xl p-6 text-center">
+              <p class="text-gray-500">No active tasks</p>
+            </div>
+          </template>
+          
+          <div class="grid grid-cols-1 gap-4">
+            <template x-for="job in ownerData.getActiveTasks('KAMRAN')" :key="'kamran-'+job.id">
+              <div class="task-card rounded-2xl p-5">
+                <div class="flex justify-between items-start">
+                  <div class="flex-1">
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <p class="text-gray-600 mt-2 mb-4">
+                      <span x-text="job.description.slice(0, 50) + (job.description.length > 50 ? '...' : '')"></span>
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="text-sm uppercase text-gray-500 font-medium block mb-1">CREATED DATE</label>
+                        <p class="font-medium" x-text="job.created"></p>
+                      </div>
+                      <div>
+                        <label class="text-sm uppercase text-gray-500 font-medium block mb-1">DEADLINE</label>
+                        <p class="font-medium" x-text="job.deadline"></p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="ml-4 min-w-[160px]">
+                    <div class="mb-3">
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">PAYMENT</label>
+                      <div class="flex items-center gap-2">
+                        <select x-model="job.payment" @change="ownerData.updateTask('KAMRAN', job.id, 'payment', job.payment)" 
+                                class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent">
+                          <option value="NOT PAID">NOT PAID</option>
+                          <option value="PAID">PAID</option>
+                          <option value="DON'T KNOW">DON'T KNOW</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">AMOUNT</label>
+                      <input type="text" x-model="job.amount" @change="ownerData.updateTask('KAMRAN', job.id, 'amount', job.amount)" 
+                             class="w-full p-2 border rounded-lg text-center" placeholder="$0.00" />
+                    </div>
+                    
+                    <div class="mt-3">
+                      <span class="text-sm uppercase text-gray-500 font-medium block mb-1">REVISIONS</span>
+                      <span class="text-lg font-bold text-center block" x-text="job.revisions"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="ownerData.tab==='done'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <i class="fas fa-check-circle text-green-500"></i>TASKS DONE
+        </h2>
+        
+        <!-- ABUZAR's Tasks -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <span class="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-3 py-1 rounded-xl flex items-center gap-2">
+              <i class="fas fa-user-tie"></i>ABUZAR
+            </span>
+          </h3>
+          
+          <template x-if="ownerData.getDoneTasks('ABUZAR').length === 0">
+            <div class="glass-panel rounded-2xl p-6 text-center">
+              <p class="text-gray-500">No completed tasks</p>
+            </div>
+          </template>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <template x-for="job in ownerData.getDoneTasks('ABUZAR')" :key="'abuzar-'+job.id">
+              <div class="task-card rounded-2xl p-5">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <p class="text-sm text-gray-500 mt-2"><i class="fas fa-user-tie mr-2"></i>DONE BY: ABUZAR</p>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-calendar-check mr-2"></i>DONE ON: <span class="font-medium" x-text="job.done"></span></p>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-hourglass-end mr-2"></i>DEADLINE: <span class="font-medium" x-text="job.deadline"></span></p>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-sync-alt mr-2"></i>REVISIONS: <span class="font-medium" x-text="job.revisions"></span></p>
+                  </div>
+                  
+                  <div class="ml-4 min-w-[140px]">
+                    <div class="mb-3">
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">PAYMENT</label>
+                      <select x-model="job.payment" @change="ownerData.updateTask('ABUZAR', job.id, 'payment', job.payment)" 
+                              class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="NOT PAID">NOT PAID</option>
+                        <option value="PAID">PAID</option>
+                        <option value="DON'T KNOW">DON'T KNOW</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">AMOUNT</label>
+                      <input type="text" x-model="job.amount" @change="ownerData.updateTask('ABUZAR', job.id, 'amount', job.amount)" 
+                             class="w-full p-2 border rounded-lg text-center" placeholder="$0.00" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                  <p class="text-gray-600" x-text="job.description"></p>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+        
+        <!-- KAMRAN's Tasks -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <span class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-xl flex items-center gap-2">
+              <i class="fas fa-user-graduate"></i>KAMRAN
+            </span>
+          </h3>
+          
+          <template x-if="ownerData.getDoneTasks('KAMRAN').length === 0">
+            <div class="glass-panel rounded-2xl p-6 text-center">
+              <p class="text-gray-500">No completed tasks</p>
+            </div>
+          </template>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <template x-for="job in ownerData.getDoneTasks('KAMRAN')" :key="'kamran-'+job.id">
+              <div class="task-card rounded-2xl p-5">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase" x-text="job.name"></h4>
+                    <p class="text-sm text-gray-500 mt-2"><i class="fas fa-user-graduate mr-2"></i>DONE BY: KAMRAN</p>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-calendar-check mr-2"></i>DONE ON: <span class="font-medium" x-text="job.done"></span></p>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-hourglass-end mr-2"></i>DEADLINE: <span class="font-medium" x-text="job.deadline"></span></p>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-sync-alt mr-2"></i>REVISIONS: <span class="font-medium" x-text="job.revisions"></span></p>
+                  </div>
+                  
+                  <div class="ml-4 min-w-[140px]">
+                    <div class="mb-3">
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">PAYMENT</label>
+                      <select x-model="job.payment" @change="ownerData.updateTask('KAMRAN', job.id, 'payment', job.payment)" 
+                              class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="NOT PAID">NOT PAID</option>
+                        <option value="PAID">PAID</option>
+                        <option value="DON'T KNOW">DON'T KNOW</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label class="text-sm uppercase text-gray-500 font-medium block mb-1">AMOUNT</label>
+                      <input type="text" x-model="job.amount" @change="ownerData.updateTask('KAMRAN', job.id, 'amount', job.amount)" 
+                             class="w-full p-2 border rounded-lg text-center" placeholder="$0.00" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                  <p class="text-gray-600" x-text="job.description"></p>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script>
-    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx8AG9ktOqPbvKeM6mRlqIEOYh4ouGLHGjQWt8hNHnh0_xwV-HYPpFbW-ng2j8C7PEZ/exec';
-
-    function ownerApp(){
+    function employeeDashboard(name) {
+      return {
+        name: name,
+        tab: 'today',
+        status: localStorage.getItem(`${name}_status`) || 'FREE',
+        tasks: JSON.parse(localStorage.getItem(`${name}_tasks`) || '[]'),
+        todayTasks: JSON.parse(localStorage.getItem(`${name}_todayTasks`) || '[]'),
+        newJob: { 
+          name: '', 
+          description: '', 
+          deadline: new Date().toISOString().split('T')[0],
+          created: new Date().toISOString().split('T')[0],
+          revisions: 0, 
+          payment: 'NOT PAID',
+          amount: 0
+        },
+        editTask: null,
+        descContent: '',
+        selectedToday: [],
+        showAddModal: false,
+        showEditModal: false,
+        showDescModal: false,
+        showTodayModal: false,
+        init() { this.resetToday(); },
+        save() {
+          localStorage.setItem(`${this.name}_tasks`, JSON.stringify(this.tasks));
+          localStorage.setItem(`${this.name}_status`, this.status);
+          localStorage.setItem(`${this.name}_todayTasks`, JSON.stringify(this.todayTasks));
+        },
+        toggleStatus() { 
+          this.status = this.status === 'FREE' ? 'BUSY' : 'FREE'; 
+          this.save(); 
+        },
+        activeTasks() { return this.tasks.filter(j => !j.done); },
+        doneTasks() { return this.tasks.filter(j => j.done); },
+        addJob() {
+          const j = {...this.newJob, id: Date.now()};
+          this.tasks.push(j);
+          this.newJob = { 
+            name: '', 
+            description: '', 
+            deadline: new Date().toISOString().split('T')[0],
+            created: new Date().toISOString().split('T')[0],
+            revisions: 0, 
+            payment: 'NOT PAID',
+            amount: 0
+          };
+          this.save(); 
+          this.closeModals();
+        },
+        updateTask() {
+          const index = this.tasks.findIndex(t => t.id === this.editTask.id);
+          if (index !== -1) {
+            this.tasks[index] = this.editTask;
+            this.save();
+          }
+          this.closeModals();
+        },
+        removeById(id) { 
+          this.tasks = this.tasks.filter(j => j.id !== id); 
+          this.save(); 
+        },
+        markDoneById(id) { 
+          const i = this.tasks.findIndex(j => j.id === id); 
+          this.tasks[i].done = new Date().toLocaleDateString(); 
+          this.save(); 
+        },
+        changeRevisionById(id, val) { 
+          const i = this.tasks.findIndex(j => j.id === id); 
+          this.tasks[i].revisions = Math.max(0, this.tasks[i].revisions + val); 
+          this.save(); 
+        },
+        showDesc(job) { 
+          this.descContent = job.description; 
+          this.showDescModal = true; 
+        },
+        toggleSelection(id) {
+          const idx = this.selectedToday.indexOf(id.toString());
+          if (idx >= 0) this.selectedToday.splice(idx, 1);
+          else this.selectedToday.push(id.toString());
+        },
+        addTodayTasks() {
+          this.todayTasks = this.tasks.filter(j => this.selectedToday.includes(j.id.toString()));
+          this.tab = 'today';
+          this.save(); 
+          this.closeModals();
+        },
+        resetToday() { 
+          const today = new Date().toLocaleDateString(); 
+          if (localStorage.getItem(`${this.name}_todayDate`) !== today) { 
+            localStorage.setItem(`${this.name}_todayDate`, today); 
+            this.todayTasks = []; 
+            this.save(); 
+          } 
+        },
+        reviseAgain(id) { 
+          const i = this.tasks.findIndex(j => j.id === id); 
+          delete this.tasks[i].done; 
+          this.save(); 
+        },
+        closeModals() { 
+          this.showAddModal = false; 
+          this.showEditModal = false;
+          this.showDescModal = false; 
+          this.showTodayModal = false; 
+          this.selectedToday = []; 
+        }
+      }
+    }
+    
+    function ownerDashboard() {
       return {
         tab: 'today',
-        data: { today:{}, active:{}, done:{} },
-
-        init(){
-          this.fetchAll();
-          setInterval(()=>this.fetchAll(),5000);
+        employees: ['ABUZAR', 'KAMRAN'],
+        getTasks(employee) {
+          return JSON.parse(localStorage.getItem(`${employee}_tasks`) || '[]');
         },
-
-        fetchAll(){
-          fetch(SHEET_URL)
-            .then(r=>r.json())
-            .then(rows=>{
-              const g={ today:{}, active:{}, done:{} };
-              rows.forEach(r=>{
-                const sec=r.section;
-                if(!g[sec][r.employee]) g[sec][r.employee]=[];
-                g[sec][r.employee].push(r);
-              });
-              this.data=g;
-            });
+        getTodayTasks(employee) {
+          return JSON.parse(localStorage.getItem(`${employee}_todayTasks`) || '[]');
+        },
+        getStatus(employee) {
+          return localStorage.getItem(`${employee}_status`) || 'FREE';
+        },
+        toggleStatus(employee) {
+          const current = this.getStatus(employee);
+          const newStatus = current === 'FREE' ? 'BUSY' : 'FREE';
+          localStorage.setItem(`${employee}_status`, newStatus);
+        },
+        getActiveTasks(employee) {
+          return this.getTasks(employee).filter(j => !j.done);
+        },
+        getDoneTasks(employee) {
+          return this.getTasks(employee).filter(j => j.done);
+        },
+        updateTask(employee, id, field, value) {
+          const tasks = this.getTasks(employee);
+          const index = tasks.findIndex(t => t.id === id);
+          if (index !== -1) {
+            tasks[index][field] = value;
+            localStorage.setItem(`${employee}_tasks`, JSON.stringify(tasks));
+          }
+        }
+      }
+    }
+    
+    function mainApp() {
+      return {
+        showUserSelect: true,
+        currentUser: null,
+        dashboards: {
+          ABUZAR: employeeDashboard('ABUZAR'),
+          KAMRAN: employeeDashboard('KAMRAN')
+        },
+        ownerData: ownerDashboard(),
+        selectUser(user) {
+          this.currentUser = user;
+          this.showUserSelect = false;
+          
+          // Initialize dashboard if needed
+          if (user === 'ABUZAR' || user === 'KAMRAN') {
+            this.dashboards[user].init();
+          }
         }
       }
     }
