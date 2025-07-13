@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" x-data="ownerApp()" x-init="init()">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OWNER DASHBOARD</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+  <header class="p-6 bg-white shadow">
+    <h1 class="text-3xl font-bold uppercase">Owner Dashboard</h1>
+  </header>
+
+  <main class="p-6 space-y-12">
+    <!-- TODAY'S TASKS -->
+    <section>
+      <h2 class="text-2xl font-semibold uppercase mb-4">TODAY'S TASKS</h2>
+      <template x-for="emp in employees" :key="emp.name">
+        <div class="mb-6 bg-white p-4 rounded shadow">
+          <h3 class="text-xl font-bold uppercase" x-text="emp.name"></h3>
+          <template x-if="emp.data.todayTasks && emp.data.todayTasks.length">
+            <ul class="mt-2 space-y-2">
+              <template x-for="job in emp.data.todayTasks" :key="job.id">
+                <li class="p-3 border rounded">
+                  <div class="flex justify-between">
+                    <span class="font-medium uppercase" x-text="job.name"></span>
+                    <span class="text-sm uppercase" x-text="job.deadline"></span>
+                  </div>
+                  <p class="text-gray-600 mt-1" x-text="job.description"></p>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template x-if="!emp.data.todayTasks || !emp.data.todayTasks.length">
+            <p class="text-gray-500">No tasks for today.</p>
+          </template>
+        </div>
+      </template>
+    </section>
+
+    <!-- ACTIVE TASKS -->
+    <section>
+      <h2 class="text-2xl font-semibold uppercase mb-4">ACTIVE TASKS</h2>
+      <template x-for="emp in employees" :key="emp.name">
+        <div class="mb-6 bg-white p-4 rounded shadow">
+          <h3 class="text-xl font-bold uppercase" x-text="emp.name"></h3>
+          <template x-if="emp.data.activeTasks && emp.data.activeTasks.length">
+            <ul class="mt-2 space-y-2">
+              <template x-for="job in emp.data.activeTasks" :key="job.id">
+                <li class="p-3 border rounded flex justify-between items-center">
+                  <div>
+                    <span class="font-medium uppercase" x-text="job.name"></span>
+                    <p class="text-gray-600" x-text="job.description"></p>
+                  </div>
+                  <div class="flex items-center space-x-4 uppercase">
+                    <span class="text-sm" x-text="job.deadline"></span>
+                    <div>
+                      <label class="block text-xs">Payment</label>
+                      <input type="text" x-model="job._ownerPayment || ''" placeholder="amt" class="w-16 p-1 border rounded text-sm" />
+                      <select x-model="job._ownerStatus" class="mt-1 p-1 border rounded text-sm">
+                        <option value="PENDING">PENDING</option>
+                        <option value="PAID">PAID</option>
+                      </select>
+                    </div>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template x-if="!emp.data.activeTasks || !emp.data.activeTasks.length">
+            <p class="text-gray-500">No active tasks.</p>
+          </template>
+        </div>
+      </template>
+    </section>
+
+    <!-- TASKS DONE -->
+    <section>
+      <h2 class="text-2xl font-semibold uppercase mb-4">TASKS DONE</h2>
+      <template x-for="emp in employees" :key="emp.name">
+        <div class="mb-6 bg-white p-4 rounded shadow">
+          <h3 class="text-xl font-bold uppercase" x-text="emp.name"></h3>
+          <template x-if="emp.data.doneTasks && emp.data.doneTasks.length">
+            <ul class="mt-2 space-y-2">
+              <template x-for="job in emp.data.doneTasks" :key="job.id">
+                <li class="p-3 border rounded">
+                  <div class="flex justify-between">
+                    <span class="font-medium uppercase" x-text="job.name"></span>
+                    <span class="text-sm uppercase" x-text="job.done"></span>
+                  </div>
+                  <p class="text-gray-600 mt-1" x-text="job.description"></p>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template x-if="!emp.data.doneTasks || !emp.data.doneTasks.length">
+            <p class="text-gray-500">No completed tasks.</p>
+          </template>
+        </div>
+      </template>
+    </section>
+  </main>
+
+  <!-- Hidden iframes to gather data -->
+  <template x-for="emp in employees" :key="emp.name">
+    <iframe :src="emp.url" class="hidden" @load="postMessageToIframe($event.target)" ></iframe>
+  </template>
+
+  <script>
+    function ownerApp() {
+      return {
+        employees: [
+          { name: 'ABUZAR', url: 'https://bawa-khan-abuzar.netlify.app/' },
+          { name: 'KAMRAN', url: 'https://bawa-khan-design-kamran.netlify.app' },
+          // add more employees here
+        ],
+        init() {
+          window.addEventListener('message', this.receiveData.bind(this), false);
+        },
+        postMessageToIframe(iframe) {
+          // request data from child dashboard
+          iframe.contentWindow.postMessage({ action: 'SEND_DATA' }, '*');
+        },
+        receiveData(event) {
+          const msg = event.data;
+          if (!msg || msg.action !== 'TODASHBOARD_DATA') return;
+          const emp = this.employees.find(e => e.name === msg.name);
+          if (emp) emp.data = msg.data;
+          this.$nextTick();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
