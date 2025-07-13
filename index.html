@@ -59,7 +59,7 @@
                 <div class="space-y-1 text-right">
                   <p class="text-sm uppercase">Deadline: <span x-text="job.deadline"></span></p>
                   <label class="text-sm uppercase">PAYMENT</label>
-                  <input type="text" x-model="job.paymentInfo" placeholder="Paid / Pending / Amount" class="border p-1 rounded w-full" />
+                  <input type="text" x-model="job.payment" placeholder="Paid / Pending / Amount" class="border p-1 rounded w-full" />
                 </div>
               </div>
             </div>
@@ -90,7 +90,11 @@
   <!-- Iframes (hidden) to pull data via postMessage -->
   <div class="hidden">
     <template x-for="employee in employees" :key="employee.name">
-      <iframe :src="employee.url" @load="requestData($event, employee.name)" sandbox="allow-scripts allow-same-origin"></iframe>
+      <iframe
+        :src="employee.url"
+        @load="requestData($event, employee.name)"
+        sandbox="allow-scripts allow-same-origin"
+      ></iframe>
     </template>
   </div>
 
@@ -99,15 +103,14 @@
       return {
         tab: 'today',
         employees: [
-          { name: 'ABUZAR', url: 'https://bawa-khan-abuzar.netlify.app', today: [], active: [], done: [] },
+          { name: 'ABUZAR', url: 'https://bawa-khan-design-abuzar.netlify.app', today: [], active: [], done: [] },
           { name: 'KAMRAN', url: 'https://bawa-khan-design-kamran.netlify.app', today: [], active: [], done: [] },
           // add other employees here
         ],
         init() {
           window.addEventListener('message', this.onMessage.bind(this));
         },
-        requestData(e, empName) {
-          // send a postMessage to iframe to ask for its data
+        requestData(e) {
           e.target.contentWindow.postMessage({ type: 'REQUEST_ALL' }, e.target.src);
         },
         onMessage(event) {
@@ -115,10 +118,9 @@
           if (data.type === 'RESPONSE_ALL') {
             const emp = this.employees.find(e => e.name === data.name);
             if (!emp) return;
-            emp.today = data.today;
-            emp.active = data.active;
-            emp.done = data.done;
-            // ensure Alpine reacts
+            emp.today  = data.today;
+            emp.active = data.active.map(j => ({ ...j }));
+            emp.done   = data.done;
             this.$nextTick(() => {});
           }
         }
