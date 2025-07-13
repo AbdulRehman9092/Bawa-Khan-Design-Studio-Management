@@ -2,34 +2,29 @@
 <html lang="en" x-data="ownerApp()" x-init="init()">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OWNER DASHBOARD</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Alpine.js -->
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-gray-100 min-h-screen font-sans">
-  <!-- Header -->
+<body class="bg-gray-100 font-sans min-h-screen">
   <header class="bg-white p-6 shadow">
     <h1 class="text-3xl font-bold uppercase">OWNER DASHBOARD</h1>
   </header>
 
-  <!-- Tabs -->
   <nav class="bg-white mt-4 mx-auto px-6 py-4 rounded-lg shadow w-full md:max-w-5xl flex space-x-4 uppercase">
-    <button @click="tab='today'" :class="tab==='today'?'border-b-2 border-indigo-500':''">TODAY'S TASKS</button>
-    <button @click="tab='active'" :class="tab==='active'?'border-b-2 border-indigo-500':''">ACTIVE TASKS</button>
-    <button @click="tab='done'" :class="tab==='done'?'border-b-2 border-indigo-500':''">TASKS DONE</button>
+    <button @click="tab='today'"  :class="tab==='today' ? 'border-b-2 border-indigo-500' : ''">TODAY'S TASKS</button>
+    <button @click="tab='active'" :class="tab==='active'? 'border-b-2 border-indigo-500':''">ACTIVE TASKS</button>
+    <button @click="tab='done'"   :class="tab==='done'?   'border-b-2 border-indigo-500':''">TASKS DONE</button>
   </nav>
 
-  <!-- Content -->
   <main class="mt-6 mx-auto w-full md:max-w-5xl p-4">
-    <!-- TODAY'S TASKS -->
+    <!-- TODAY -->
     <section x-show="tab==='today'" x-transition>
-      <template x-for="employee in employees" :key="employee.name">
+      <template x-for="(jobs, emp) in data.today" :key="emp">
         <div class="mb-6">
-          <h2 class="text-2xl font-semibold uppercase" x-text="employee.name"></h2>
-          <template x-for="job in employee.today" :key="job.id">
+          <h2 class="text-2xl font-semibold uppercase" x-text="emp"></h2>
+          <template x-for="job in jobs" :key="job.id">
             <div class="bg-white p-4 rounded-lg shadow mb-2">
               <div class="flex justify-between">
                 <div>
@@ -44,22 +39,22 @@
       </template>
     </section>
 
-    <!-- ACTIVE TASKS -->
+    <!-- ACTIVE -->
     <section x-show="tab==='active'" x-transition>
-      <template x-for="employee in employees" :key="employee.name">
+      <template x-for="(jobs, emp) in data.active" :key="emp">
         <div class="mb-6">
-          <h2 class="text-2xl font-semibold uppercase" x-text="employee.name"></h2>
-          <template x-for="job in employee.active" :key="job.id">
+          <h2 class="text-2xl font-semibold uppercase" x-text="emp"></h2>
+          <template x-for="job in jobs" :key="job.id">
             <div class="bg-white p-4 rounded-lg shadow mb-2">
               <div class="flex justify-between">
                 <div>
                   <h4 class="font-bold uppercase" x-text="job.name"></h4>
                   <p x-text="job.description"></p>
                 </div>
-                <div class="space-y-1 text-right">
+                <div class="text-right space-y-1">
                   <p class="text-sm uppercase">Deadline: <span x-text="job.deadline"></span></p>
                   <label class="text-sm uppercase">PAYMENT</label>
-                  <input type="text" x-model="job.payment" placeholder="Paid / Pending / Amount" class="border p-1 rounded w-full" />
+                  <span x-text="job.payment"></span>
                 </div>
               </div>
             </div>
@@ -68,16 +63,16 @@
       </template>
     </section>
 
-    <!-- TASKS DONE -->
+    <!-- DONE -->
     <section x-show="tab==='done'" x-transition>
-      <template x-for="employee in employees" :key="employee.name">
+      <template x-for="(jobs, emp) in data.done" :key="emp">
         <div class="mb-6">
-          <h2 class="text-2xl font-semibold uppercase" x-text="employee.name"></h2>
-          <template x-for="job in employee.done" :key="job.id">
+          <h2 class="text-2xl font-semibold uppercase" x-text="emp"></h2>
+          <template x-for="job in jobs" :key="job.id">
             <div class="bg-white p-4 rounded-lg shadow mb-2">
               <div class="flex justify-between">
                 <span class="font-bold uppercase" x-text="job.name"></span>
-                <p class="text-sm uppercase">Done on: <span x-text="job.done"></span></p>
+                <p class="text-sm uppercase">Done on: <span x-text="job.timestamp.slice(0,10)"></span></p>
               </div>
               <p x-text="job.description"></p>
             </div>
@@ -87,44 +82,33 @@
     </section>
   </main>
 
-  <!-- Iframes (hidden) to pull data via postMessage -->
-  <div class="hidden">
-    <template x-for="employee in employees" :key="employee.name">
-      <iframe
-        :src="employee.url"
-        @load="requestData($event, employee.name)"
-        sandbox="allow-scripts allow-same-origin"
-      ></iframe>
-    </template>
-  </div>
-
   <script>
-    function ownerApp() {
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx8AG9ktOqPbvKeM6mRlqIEOYh4ouGLHGjQWt8hNHnh0_xwV-HYPpFbW-ng2j8C7PEZ/exec';
+
+    function ownerApp(){
       return {
         tab: 'today',
-        employees: [
-          { name: 'ABUZAR', url: 'https://bawa-khan-design-abuzar.netlify.app', today: [], active: [], done: [] },
-          { name: 'KAMRAN', url: 'https://bawa-khan-design-kamran.netlify.app', today: [], active: [], done: [] },
-          // add other employees here
-        ],
-        init() {
-          window.addEventListener('message', this.onMessage.bind(this));
+        data: { today:{}, active:{}, done:{} },
+
+        init(){
+          this.fetchAll();
+          setInterval(()=>this.fetchAll(),5000);
         },
-        requestData(e) {
-          e.target.contentWindow.postMessage({ type: 'REQUEST_ALL' }, e.target.src);
-        },
-        onMessage(event) {
-          const data = event.data;
-          if (data.type === 'RESPONSE_ALL') {
-            const emp = this.employees.find(e => e.name === data.name);
-            if (!emp) return;
-            emp.today  = data.today;
-            emp.active = data.active.map(j => ({ ...j }));
-            emp.done   = data.done;
-            this.$nextTick(() => {});
-          }
+
+        fetchAll(){
+          fetch(SHEET_URL)
+            .then(r=>r.json())
+            .then(rows=>{
+              const g={ today:{}, active:{}, done:{} };
+              rows.forEach(r=>{
+                const sec=r.section;
+                if(!g[sec][r.employee]) g[sec][r.employee]=[];
+                g[sec][r.employee].push(r);
+              });
+              this.data=g;
+            });
         }
-      };
+      }
     }
   </script>
 </body>
