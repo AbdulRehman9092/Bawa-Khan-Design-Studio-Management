@@ -408,7 +408,7 @@
 </head>
 <body class="min-h-screen" x-data="mainApp()">
   <!-- User Selection Modal -->
-  <div x-show="showUserSelect" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+  <div x-show="showUserSelect" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate__animated animate__zoomIn">
       <div class="text-center mb-8">
         <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-indigo-100 flex items-center justify-center">
@@ -418,7 +418,7 @@
         <p class="text-gray-600 mt-2">Select your dashboard</p>
       </div>
       
-      <div class="grid grid-cols-1 gap-4">
+      <div class="grid grid-cols-1 gap-4 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-100">
 
         <button @click="selectUser('OWNER')" 
                 class="px-6 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-emerald-500 to-emerald-700 text-white hover:from-emerald-600 hover:to-emerald-800 transform hover:-translate-y-1">
@@ -438,10 +438,49 @@
           <span class="text-xl font-bold">KAMRAN</span>
         </button>
         
+        <button @click="selectUser('MAQBOOL')" 
+                class="px-6 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-indigo-500 to-indigo-700 text-white hover:from-indigo-600 hover:to-indigo-800 transform hover:-translate-y-1">
+          <i class="fas fa-user-tie text-xl mr-3"></i>
+          <span class="text-xl font-bold">MAQBOOL</span>
+        </button>
+
+        <button @click="selectUser('ALI_ZULFIQAR')" 
+                class="px-6 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-indigo-500 to-indigo-700 text-white hover:from-indigo-600 hover:to-indigo-800 transform hover:-translate-y-1">
+          <i class="fas fa-user-tie text-xl mr-3"></i>
+          <span class="text-xl font-bold">ALI_ZULFIQAR</span>
+        </button>
+
+        <button @click="selectUser('MUDASSIR')" 
+                class="px-6 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-indigo-500 to-indigo-700 text-white hover:from-indigo-600 hover:to-indigo-800 transform hover:-translate-y-1">
+          <i class="fas fa-user-tie text-xl mr-3"></i>
+          <span class="text-xl font-bold">MUDASSIR</span>
+        </button>
+
+        <button @click="selectUser('ALI')" 
+                class="px-6 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-indigo-500 to-indigo-700 text-white hover:from-indigo-600 hover:to-indigo-800 transform hover:-translate-y-1">
+          <i class="fas fa-user-tie text-xl mr-3"></i>
+          <span class="text-xl font-bold">ALI</span>
+        </button>
+
+        <button @click="selectUser('ABDUL_REHMAN')" 
+                class="px-6 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-indigo-500 to-indigo-700 text-white hover:from-indigo-600 hover:to-indigo-800 transform hover:-translate-y-1">
+          <i class="fas fa-user-tie text-xl mr-3"></i>
+          <span class="text-xl font-bold">ABDUL_REHMAN</span>
+        </button>
         
       </div>
     </div>
   </div>
+
+
+
+
+
+
+
+
+
+
 
   <!-- ABUZAR Dashboard -->
   <div id="ABUZAR_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'ABUZAR'}">
@@ -801,6 +840,15 @@
     </template>
   </div>
 
+
+
+
+
+
+
+
+
+
   <!-- KAMRAN Dashboard - Similar structure with different color accents -->
   <div id="KAMRAN_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'KAMRAN'}">
 <header class="dashboard-header flex flex-wrap justify-between items-center">
@@ -1159,6 +1207,1844 @@
     </template>
   </div>
 
+
+
+
+
+
+
+
+
+<!-- MAQBOOL Dashboard - Similar structure with different color accents -->
+<div id="MAQBOOL_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'MAQBOOL'}">
+<header class="dashboard-header flex flex-wrap justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-4">
+          <i class="fas fa-user-tie text-2xl text-indigo-600"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-white uppercase">MAQBOOL'S DASHBOARD</h1>
+      </div>
+      
+      <button @click="dashboards.MAQBOOL.toggleStatus()" 
+              class="px-5 py-2.5 rounded-xl shadow-lg transition-all flex items-center"
+              :class="dashboards.MAQBOOL.status === 'BUSY' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'">
+        <span class="status-indicator" :class="dashboards.MAQBOOL.status === 'BUSY' ? 'status-busy' : 'status-free'"></span>
+        <span class="font-semibold text-white" x-text="dashboards.MAQBOOL.status"></span>
+      </button>
+    </header>
+
+    <nav class="nav-tabs flex justify-center space-x-2">
+      <button @click="dashboards.MAQBOOL.tab='today'" 
+              :class="dashboards.MAQBOOL.tab==='today'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-calendar-day mr-2"></i>TODAY TASKS
+      </button>
+      <button @click="dashboards.MAQBOOL.tab='active'" 
+              :class="dashboards.MAQBOOL.tab==='active'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-tasks mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="dashboards.MAQBOOL.tab='done'" 
+              :class="dashboards.MAQBOOL.tab==='done'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-2 mx-auto w-full md:max-w-4xl p-4">
+      <!-- TODAY TASKS -->
+      <section x-show="dashboards.MAQBOOL.tab==='today'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">TODAY'S TASKS</h2>
+          <button @click="dashboards.MAQBOOL.showTodayModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>SELECT TASKS
+          </button>
+        </div>
+        
+        <template x-if="dashboards.MAQBOOL.todayTasks.length === 0">
+          <div class="empty-state">
+            <i class="fas fa-inbox text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No tasks for today</h3>
+            <p class="text-slate-500">Select tasks from your active list to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.MAQBOOL.todayTasks" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-warning ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4">
+                  <span class="cursor-pointer hover:text-primary transition-colors" 
+                        @click="dashboards.MAQBOOL.showDesc(job)" 
+                        x-text="job.description.slice(0,60)+'...'"></span>
+                </p>
+                
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center text-slate-500">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span class="font-medium">Deadline:</span>
+                    <span class="ml-1" x-text="job.deadline"></span>
+                  </div>
+                  
+                  <div class="flex items-center text-slate-500">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    <span class="font-medium">Revisions:</span>
+                    <span class="ml-1" x-text="job.revisions"></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ml-4 flex flex-col gap-2">
+                <button @click="dashboards.MAQBOOL.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="dashboards.MAQBOOL.tab==='active'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">ACTIVE TASKS</h2>
+          <button @click="dashboards.MAQBOOL.showAddModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>ADD TASK
+          </button>
+        </div>
+        
+        <template x-if="dashboards.MAQBOOL.activeTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No active tasks</h3>
+            <p class="text-slate-500">Add a new task to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.MAQBOOL.activeTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <input x-model="job.name" type="text" class="input-field text-lg font-bold uppercase" placeholder="Task name" />
+                  <button @click="dashboards.MAQBOOL.save()" class="ml-3 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-save text-xl"></i>
+                  </button>
+                </div>
+                
+                <textarea x-model="job.description" placeholder="Description" class="input-field h-24 mb-4"></textarea>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-plus mr-2"></i>CREATED DATE
+                    </label>
+                    <input type="date" x-model="job.created" class="input-field" />
+                  </div>
+                  
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                    </label>
+                    <input type="date" x-model="job.deadline" class="input-field" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-48 flex flex-col gap-3">
+                <button @click="dashboards.MAQBOOL.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+                
+                <div class="bg-slate-50 rounded-xl p-3">
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-sync-alt mr-2"></i>REVISIONS
+                  </label>
+                  <div class="flex items-center justify-between">
+                    <button @click="dashboards.MAQBOOL.changeRevisionById(job.id,-1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="text-xl font-bold px-4" x-text="job.revisions"></span>
+                    <button @click="dashboards.MAQBOOL.changeRevisionById(job.id,1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-money-bill-wave mr-2"></i>PAYMENT
+                  </label>
+                  <select x-model="job.payment" class="input-field">
+                    <option value="NOT PAID">NOT PAID</option>
+                    <option value="PAID">PAID</option>
+                    <option value="DON'T KNOW">DON'T KNOW</option>
+                  </select>
+                </div>
+                
+                <button @click="dashboards.MAQBOOL.removeById(job.id)" 
+                        class="btn btn-danger mt-2">
+                  <i class="fas fa-trash mr-2"></i>DELETE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="dashboards.MAQBOOL.tab==='done'" x-transition class="animate__animated animate__fadeIn">
+        <h2 class="text-2xl font-bold uppercase text-slate-800 mb-6">JOBS DONE</h2>
+        
+        <template x-if="dashboards.MAQBOOL.doneTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-check-circle text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No completed tasks yet</h3>
+            <p class="text-slate-500">Complete some tasks to see them here</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.MAQBOOL.doneTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-success ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4" x-text="job.description"></p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="flex items-center">
+                    <i class="far fa-calendar-check text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DONE ON</div>
+                      <div class="font-medium" x-text="job.done"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="far fa-clock text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DEADLINE</div>
+                      <div class="font-medium" x-text="job.deadline"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="fas fa-sync-alt text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">REVISIONS</div>
+                      <div class="font-medium" x-text="job.revisions"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-40">
+                <button @click="dashboards.MAQBOOL.reviseAgain(job.id)" 
+                        class="btn btn-warning w-full">
+                  <i class="fas fa-redo mr-2"></i>REVISE AGAIN
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+    </main>
+
+    <!-- MODALS for MAQBOOL -->
+    <template x-if="dashboards.MAQBOOL.showAddModal || dashboards.MAQBOOL.showDescModal || dashboards.MAQBOOL.showTodayModal">
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <div class="modal-close" @click="dashboards.MAQBOOL.closeModals()">
+            <i class="fas fa-times"></i>
+          </div>
+          
+          <!-- ADD TASK -->
+          <template x-if="dashboards.MAQBOOL.showAddModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-plus-circle text-indigo-600 mr-3"></i>
+                ADD NEW TASK
+              </h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-plus mr-2"></i>CREATION DATE
+                  </label>
+                  <input type="text" x-bind:value="dashboards.MAQBOOL.newJob.created" readonly class="input-field bg-slate-100" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-heading mr-2"></i>TASK NAME
+                  </label>
+                  <input x-model="dashboards.MAQBOOL.newJob.name" type="text" placeholder="Job Name" class="input-field" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-align-left mr-2"></i>DESCRIPTION
+                  </label>
+                  <textarea x-model="dashboards.MAQBOOL.newJob.description" placeholder="Description" class="input-field h-32"></textarea>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                  </label>
+                  <input x-model="dashboards.MAQBOOL.newJob.deadline" type="date" class="input-field" />
+                </div>
+              </div>
+              
+              <div class="flex justify-end space-x-3 mt-8">
+                <button @click="dashboards.MAQBOOL.addJob()" class="btn btn-primary">
+                  <i class="fas fa-plus mr-2"></i>ADD TASK
+                </button>
+                <button @click="dashboards.MAQBOOL.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- DESCRIPTION POPUP -->
+          <template x-if="dashboards.MAQBOOL.showDescModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-align-left text-indigo-600 mr-3"></i>
+                DESCRIPTION
+              </h3>
+              
+              <div class="bg-slate-50 rounded-xl p-5 mb-6">
+                <p x-text="dashboards.MAQBOOL.descContent" class="whitespace-pre-line"></p>
+              </div>
+              
+              <button @click="dashboards.MAQBOOL.closeModals()" class="btn btn-primary w-full">
+                <i class="fas fa-check mr-2"></i>CLOSE
+              </button>
+            </div>
+          </template>
+
+          <!-- TODAY SELECT -->
+          <template x-if="dashboards.MAQBOOL.showTodayModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-calendar-day text-indigo-600 mr-3"></i>
+                SELECT TODAY'S TASKS
+              </h3>
+              
+              <div class="max-h-80 overflow-y-auto pr-2 mb-6">
+                <template x-for="job in dashboards.MAQBOOL.activeTasks()" :key="job.id">
+                  <div class="flex items-center mb-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer" 
+                       @click="dashboards.MAQBOOL.toggleSelection(job.id)">
+                    <input type="checkbox" :value="job.id" x-model="dashboards.MAQBOOL.selectedToday" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
+                    <div class="ml-3">
+                      <div class="font-medium text-slate-800" x-text="job.name"></div>
+                      <div class="text-sm text-slate-500" x-text="job.description.slice(0, 40) + '...'"></div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              
+              <div class="flex justify-end space-x-3">
+                <button @click="dashboards.MAQBOOL.addTodayTasks()" class="btn btn-primary">
+                  <i class="fas fa-check mr-2"></i>SELECT TASKS
+                </button>
+                <button @click="dashboards.MAQBOOL.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+
+
+
+
+
+
+
+
+
+  <!-- ALI_ZULFIQAR Dashboard -->
+  <div id="ALI_ZULFIQAR_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'ALI_ZULFIQAR'}">
+    <header class="dashboard-header flex flex-wrap justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-4">
+          <i class="fas fa-user-tie text-2xl text-indigo-600"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-white uppercase">ALI_ZULFIQAR'S DASHBOARD</h1>
+      </div>
+      
+      <button @click="dashboards.ALI_ZULFIQAR.toggleStatus()" 
+              class="px-5 py-2.5 rounded-xl shadow-lg transition-all flex items-center"
+              :class="dashboards.ALI_ZULFIQAR.status === 'BUSY' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'">
+        <span class="status-indicator" :class="dashboards.ALI_ZULFIQAR.status === 'BUSY' ? 'status-busy' : 'status-free'"></span>
+        <span class="font-semibold text-white" x-text="dashboards.ALI_ZULFIQAR.status"></span>
+      </button>
+    </header>
+
+    <nav class="nav-tabs flex justify-center space-x-2">
+      <button @click="dashboards.ALI_ZULFIQAR.tab='today'" 
+              :class="dashboards.ALI_ZULFIQAR.tab==='today'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-calendar-day mr-2"></i>TODAY TASKS
+      </button>
+      <button @click="dashboards.ALI_ZULFIQAR.tab='active'" 
+              :class="dashboards.ALI_ZULFIQAR.tab==='active'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-tasks mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="dashboards.ALI_ZULFIQAR.tab='done'" 
+              :class="dashboards.ALI_ZULFIQAR.tab==='done'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-2 mx-auto w-full md:max-w-4xl p-4">
+      <!-- TODAY TASKS -->
+      <section x-show="dashboards.ALI_ZULFIQAR.tab==='today'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">TODAY'S TASKS</h2>
+          <button @click="dashboards.ALI_ZULFIQAR.showTodayModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>SELECT TASKS
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ALI_ZULFIQAR.todayTasks.length === 0">
+          <div class="empty-state">
+            <i class="fas fa-inbox text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No tasks for today</h3>
+            <p class="text-slate-500">Select tasks from your active list to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ALI_ZULFIQAR.todayTasks" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-warning ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4">
+                  <span class="cursor-pointer hover:text-primary transition-colors" 
+                        @click="dashboards.ALI_ZULFIQAR.showDesc(job)" 
+                        x-text="job.description.slice(0,60)+'...'"></span>
+                </p>
+                
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center text-slate-500">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span class="font-medium">Deadline:</span>
+                    <span class="ml-1" x-text="job.deadline"></span>
+                  </div>
+                  
+                  <div class="flex items-center text-slate-500">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    <span class="font-medium">Revisions:</span>
+                    <span class="ml-1" x-text="job.revisions"></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ml-4 flex flex-col gap-2">
+                <button @click="dashboards.ALI_ZULFIQAR.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="dashboards.ALI_ZULFIQAR.tab==='active'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">ACTIVE TASKS</h2>
+          <button @click="dashboards.ALI_ZULFIQAR.showAddModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>ADD TASK
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ALI_ZULFIQAR.activeTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No active tasks</h3>
+            <p class="text-slate-500">Add a new task to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ALI_ZULFIQAR.activeTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <input x-model="job.name" type="text" class="input-field text-lg font-bold uppercase" placeholder="Task name" />
+                  <button @click="dashboards.ALI_ZULFIQAR.save()" class="ml-3 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-save text-xl"></i>
+                  </button>
+                </div>
+                
+                <textarea x-model="job.description" placeholder="Description" class="input-field h-24 mb-4"></textarea>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-plus mr-2"></i>CREATED DATE
+                    </label>
+                    <input type="date" x-model="job.created" class="input-field" />
+                  </div>
+                  
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                    </label>
+                    <input type="date" x-model="job.deadline" class="input-field" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-48 flex flex-col gap-3">
+                <button @click="dashboards.ALI_ZULFIQAR.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+                
+                <div class="bg-slate-50 rounded-xl p-3">
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-sync-alt mr-2"></i>REVISIONS
+                  </label>
+                  <div class="flex items-center justify-between">
+                    <button @click="dashboards.ALI_ZULFIQAR.changeRevisionById(job.id,-1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="text-xl font-bold px-4" x-text="job.revisions"></span>
+                    <button @click="dashboards.ALI_ZULFIQAR.changeRevisionById(job.id,1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-money-bill-wave mr-2"></i>PAYMENT
+                  </label>
+                  <select x-model="job.payment" class="input-field">
+                    <option value="NOT PAID">NOT PAID</option>
+                    <option value="PAID">PAID</option>
+                    <option value="DON'T KNOW">DON'T KNOW</option>
+                  </select>
+                </div>
+                
+                <button @click="dashboards.ALI_ZULFIQAR.removeById(job.id)" 
+                        class="btn btn-danger mt-2">
+                  <i class="fas fa-trash mr-2"></i>DELETE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="dashboards.ALI_ZULFIQAR.tab==='done'" x-transition class="animate__animated animate__fadeIn">
+        <h2 class="text-2xl font-bold uppercase text-slate-800 mb-6">JOBS DONE</h2>
+        
+        <template x-if="dashboards.ALI_ZULFIQAR.doneTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-check-circle text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No completed tasks yet</h3>
+            <p class="text-slate-500">Complete some tasks to see them here</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ALI_ZULFIQAR.doneTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-success ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4" x-text="job.description"></p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="flex items-center">
+                    <i class="far fa-calendar-check text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DONE ON</div>
+                      <div class="font-medium" x-text="job.done"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="far fa-clock text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DEADLINE</div>
+                      <div class="font-medium" x-text="job.deadline"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="fas fa-sync-alt text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">REVISIONS</div>
+                      <div class="font-medium" x-text="job.revisions"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-40">
+                <button @click="dashboards.ALI_ZULFIQAR.reviseAgain(job.id)" 
+                        class="btn btn-warning w-full">
+                  <i class="fas fa-redo mr-2"></i>REVISE AGAIN
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+    </main>
+
+    <!-- MODALS for ALI_ZULFIQAR -->
+    <template x-if="dashboards.ALI_ZULFIQAR.showAddModal || dashboards.ALI_ZULFIQAR.showDescModal || dashboards.ALI_ZULFIQAR.showTodayModal">
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <div class="modal-close" @click="dashboards.ALI_ZULFIQAR.closeModals()">
+            <i class="fas fa-times"></i>
+          </div>
+          
+          <!-- ADD TASK -->
+          <template x-if="dashboards.ALI_ZULFIQAR.showAddModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-plus-circle text-indigo-600 mr-3"></i>
+                ADD NEW TASK
+              </h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-plus mr-2"></i>CREATION DATE
+                  </label>
+                  <input type="text" x-bind:value="dashboards.ALI_ZULFIQAR.newJob.created" readonly class="input-field bg-slate-100" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-heading mr-2"></i>TASK NAME
+                  </label>
+                  <input x-model="dashboards.ALI_ZULFIQAR.newJob.name" type="text" placeholder="Job Name" class="input-field" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-align-left mr-2"></i>DESCRIPTION
+                  </label>
+                  <textarea x-model="dashboards.ALI_ZULFIQAR.newJob.description" placeholder="Description" class="input-field h-32"></textarea>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                  </label>
+                  <input x-model="dashboards.ALI_ZULFIQAR.newJob.deadline" type="date" class="input-field" />
+                </div>
+              </div>
+              
+              <div class="flex justify-end space-x-3 mt-8">
+                <button @click="dashboards.ALI_ZULFIQAR.addJob()" class="btn btn-primary">
+                  <i class="fas fa-plus mr-2"></i>ADD TASK
+                </button>
+                <button @click="dashboards.ALI_ZULFIQAR.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- DESCRIPTION POPUP -->
+          <template x-if="dashboards.ALI_ZULFIQAR.showDescModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-align-left text-indigo-600 mr-3"></i>
+                DESCRIPTION
+              </h3>
+              
+              <div class="bg-slate-50 rounded-xl p-5 mb-6">
+                <p x-text="dashboards.ALI_ZULFIQAR.descContent" class="whitespace-pre-line"></p>
+              </div>
+              
+              <button @click="dashboards.ALI_ZULFIQAR.closeModals()" class="btn btn-primary w-full">
+                <i class="fas fa-check mr-2"></i>CLOSE
+              </button>
+            </div>
+          </template>
+
+          <!-- TODAY SELECT -->
+          <template x-if="dashboards.ALI_ZULFIQAR.showTodayModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-calendar-day text-indigo-600 mr-3"></i>
+                SELECT TODAY'S TASKS
+              </h3>
+              
+              <div class="max-h-80 overflow-y-auto pr-2 mb-6">
+                <template x-for="job in dashboards.ALI_ZULFIQAR.activeTasks()" :key="job.id">
+                  <div class="flex items-center mb-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer" 
+                       @click="dashboards.ALI_ZULFIQAR.toggleSelection(job.id)">
+                    <input type="checkbox" :value="job.id" x-model="dashboards.ALI_ZULFIQAR.selectedToday" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
+                    <div class="ml-3">
+                      <div class="font-medium text-slate-800" x-text="job.name"></div>
+                      <div class="text-sm text-slate-500" x-text="job.description.slice(0, 40) + '...'"></div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              
+              <div class="flex justify-end space-x-3">
+                <button @click="dashboards.ALI_ZULFIQAR.addTodayTasks()" class="btn btn-primary">
+                  <i class="fas fa-check mr-2"></i>SELECT TASKS
+                </button>
+                <button @click="dashboards.ALI_ZULFIQAR.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+
+
+
+
+
+
+
+
+<!-- MUDASSIR Dashboard -->
+<div id="MUDASSIR_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'MUDASSIR'}">
+<header class="dashboard-header flex flex-wrap justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-4">
+          <i class="fas fa-user-tie text-2xl text-indigo-600"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-white uppercase">MUDASSIR'S DASHBOARD</h1>
+      </div>
+      
+      <button @click="dashboards.MUDASSIR.toggleStatus()" 
+              class="px-5 py-2.5 rounded-xl shadow-lg transition-all flex items-center"
+              :class="dashboards.MUDASSIR.status === 'BUSY' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'">
+        <span class="status-indicator" :class="dashboards.MUDASSIR.status === 'BUSY' ? 'status-busy' : 'status-free'"></span>
+        <span class="font-semibold text-white" x-text="dashboards.MUDASSIR.status"></span>
+      </button>
+    </header>
+
+    <nav class="nav-tabs flex justify-center space-x-2">
+      <button @click="dashboards.MUDASSIR.tab='today'" 
+              :class="dashboards.MUDASSIR.tab==='today'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-calendar-day mr-2"></i>TODAY TASKS
+      </button>
+      <button @click="dashboards.MUDASSIR.tab='active'" 
+              :class="dashboards.MUDASSIR.tab==='active'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-tasks mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="dashboards.MUDASSIR.tab='done'" 
+              :class="dashboards.MUDASSIR.tab==='done'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-2 mx-auto w-full md:max-w-4xl p-4">
+      <!-- TODAY TASKS -->
+      <section x-show="dashboards.MUDASSIR.tab==='today'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">TODAY'S TASKS</h2>
+          <button @click="dashboards.MUDASSIR.showTodayModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>SELECT TASKS
+          </button>
+        </div>
+        
+        <template x-if="dashboards.MUDASSIR.todayTasks.length === 0">
+          <div class="empty-state">
+            <i class="fas fa-inbox text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No tasks for today</h3>
+            <p class="text-slate-500">Select tasks from your active list to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.MUDASSIR.todayTasks" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-warning ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4">
+                  <span class="cursor-pointer hover:text-primary transition-colors" 
+                        @click="dashboards.MUDASSIR.showDesc(job)" 
+                        x-text="job.description.slice(0,60)+'...'"></span>
+                </p>
+                
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center text-slate-500">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span class="font-medium">Deadline:</span>
+                    <span class="ml-1" x-text="job.deadline"></span>
+                  </div>
+                  
+                  <div class="flex items-center text-slate-500">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    <span class="font-medium">Revisions:</span>
+                    <span class="ml-1" x-text="job.revisions"></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ml-4 flex flex-col gap-2">
+                <button @click="dashboards.MUDASSIR.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="dashboards.MUDASSIR.tab==='active'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">ACTIVE TASKS</h2>
+          <button @click="dashboards.MUDASSIR.showAddModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>ADD TASK
+          </button>
+        </div>
+        
+        <template x-if="dashboards.MUDASSIR.activeTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No active tasks</h3>
+            <p class="text-slate-500">Add a new task to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.MUDASSIR.activeTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <input x-model="job.name" type="text" class="input-field text-lg font-bold uppercase" placeholder="Task name" />
+                  <button @click="dashboards.MUDASSIR.save()" class="ml-3 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-save text-xl"></i>
+                  </button>
+                </div>
+                
+                <textarea x-model="job.description" placeholder="Description" class="input-field h-24 mb-4"></textarea>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-plus mr-2"></i>CREATED DATE
+                    </label>
+                    <input type="date" x-model="job.created" class="input-field" />
+                  </div>
+                  
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                    </label>
+                    <input type="date" x-model="job.deadline" class="input-field" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-48 flex flex-col gap-3">
+                <button @click="dashboards.MUDASSIR.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+                
+                <div class="bg-slate-50 rounded-xl p-3">
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-sync-alt mr-2"></i>REVISIONS
+                  </label>
+                  <div class="flex items-center justify-between">
+                    <button @click="dashboards.MUDASSIR.changeRevisionById(job.id,-1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="text-xl font-bold px-4" x-text="job.revisions"></span>
+                    <button @click="dashboards.MUDASSIR.changeRevisionById(job.id,1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-money-bill-wave mr-2"></i>PAYMENT
+                  </label>
+                  <select x-model="job.payment" class="input-field">
+                    <option value="NOT PAID">NOT PAID</option>
+                    <option value="PAID">PAID</option>
+                    <option value="DON'T KNOW">DON'T KNOW</option>
+                  </select>
+                </div>
+                
+                <button @click="dashboards.MUDASSIR.removeById(job.id)" 
+                        class="btn btn-danger mt-2">
+                  <i class="fas fa-trash mr-2"></i>DELETE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="dashboards.MUDASSIR.tab==='done'" x-transition class="animate__animated animate__fadeIn">
+        <h2 class="text-2xl font-bold uppercase text-slate-800 mb-6">JOBS DONE</h2>
+        
+        <template x-if="dashboards.MUDASSIR.doneTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-check-circle text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No completed tasks yet</h3>
+            <p class="text-slate-500">Complete some tasks to see them here</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.MUDASSIR.doneTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-success ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4" x-text="job.description"></p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="flex items-center">
+                    <i class="far fa-calendar-check text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DONE ON</div>
+                      <div class="font-medium" x-text="job.done"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="far fa-clock text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DEADLINE</div>
+                      <div class="font-medium" x-text="job.deadline"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="fas fa-sync-alt text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">REVISIONS</div>
+                      <div class="font-medium" x-text="job.revisions"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-40">
+                <button @click="dashboards.MUDASSIR.reviseAgain(job.id)" 
+                        class="btn btn-warning w-full">
+                  <i class="fas fa-redo mr-2"></i>REVISE AGAIN
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+    </main>
+
+    <!-- MODALS for MUDASSIR -->
+    <template x-if="dashboards.MUDASSIR.showAddModal || dashboards.MUDASSIR.showDescModal || dashboards.MUDASSIR.showTodayModal">
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <div class="modal-close" @click="dashboards.MUDASSIR.closeModals()">
+            <i class="fas fa-times"></i>
+          </div>
+          
+          <!-- ADD TASK -->
+          <template x-if="dashboards.MUDASSIR.showAddModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-plus-circle text-indigo-600 mr-3"></i>
+                ADD NEW TASK
+              </h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-plus mr-2"></i>CREATION DATE
+                  </label>
+                  <input type="text" x-bind:value="dashboards.MUDASSIR.newJob.created" readonly class="input-field bg-slate-100" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-heading mr-2"></i>TASK NAME
+                  </label>
+                  <input x-model="dashboards.MUDASSIR.newJob.name" type="text" placeholder="Job Name" class="input-field" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-align-left mr-2"></i>DESCRIPTION
+                  </label>
+                  <textarea x-model="dashboards.MUDASSIR.newJob.description" placeholder="Description" class="input-field h-32"></textarea>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                  </label>
+                  <input x-model="dashboards.MUDASSIR.newJob.deadline" type="date" class="input-field" />
+                </div>
+              </div>
+              
+              <div class="flex justify-end space-x-3 mt-8">
+                <button @click="dashboards.MUDASSIR.addJob()" class="btn btn-primary">
+                  <i class="fas fa-plus mr-2"></i>ADD TASK
+                </button>
+                <button @click="dashboards.MUDASSIR.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- DESCRIPTION POPUP -->
+          <template x-if="dashboards.MUDASSIR.showDescModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-align-left text-indigo-600 mr-3"></i>
+                DESCRIPTION
+              </h3>
+              
+              <div class="bg-slate-50 rounded-xl p-5 mb-6">
+                <p x-text="dashboards.MUDASSIR.descContent" class="whitespace-pre-line"></p>
+              </div>
+              
+              <button @click="dashboards.MUDASSIR.closeModals()" class="btn btn-primary w-full">
+                <i class="fas fa-check mr-2"></i>CLOSE
+              </button>
+            </div>
+          </template>
+
+          <!-- TODAY SELECT -->
+          <template x-if="dashboards.MUDASSIR.showTodayModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-calendar-day text-indigo-600 mr-3"></i>
+                SELECT TODAY'S TASKS
+              </h3>
+              
+              <div class="max-h-80 overflow-y-auto pr-2 mb-6">
+                <template x-for="job in dashboards.MUDASSIR.activeTasks()" :key="job.id">
+                  <div class="flex items-center mb-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer" 
+                       @click="dashboards.MUDASSIR.toggleSelection(job.id)">
+                    <input type="checkbox" :value="job.id" x-model="dashboards.MUDASSIR.selectedToday" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
+                    <div class="ml-3">
+                      <div class="font-medium text-slate-800" x-text="job.name"></div>
+                      <div class="text-sm text-slate-500" x-text="job.description.slice(0, 40) + '...'"></div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              
+              <div class="flex justify-end space-x-3">
+                <button @click="dashboards.MUDASSIR.addTodayTasks()" class="btn btn-primary">
+                  <i class="fas fa-check mr-2"></i>SELECT TASKS
+                </button>
+                <button @click="dashboards.MUDASSIR.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+
+
+
+
+
+
+
+
+
+  <!-- ALI Dashboard -->
+  <div id="ALI_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'ALI'}">
+    <header class="dashboard-header flex flex-wrap justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-4">
+          <i class="fas fa-user-tie text-2xl text-indigo-600"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-white uppercase">ALI'S DASHBOARD</h1>
+      </div>
+      
+      <button @click="dashboards.ALI.toggleStatus()" 
+              class="px-5 py-2.5 rounded-xl shadow-lg transition-all flex items-center"
+              :class="dashboards.ALI.status === 'BUSY' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'">
+        <span class="status-indicator" :class="dashboards.ALI.status === 'BUSY' ? 'status-busy' : 'status-free'"></span>
+        <span class="font-semibold text-white" x-text="dashboards.ALI.status"></span>
+      </button>
+    </header>
+
+    <nav class="nav-tabs flex justify-center space-x-2">
+      <button @click="dashboards.ALI.tab='today'" 
+              :class="dashboards.ALI.tab==='today'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-calendar-day mr-2"></i>TODAY TASKS
+      </button>
+      <button @click="dashboards.ALI.tab='active'" 
+              :class="dashboards.ALI.tab==='active'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-tasks mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="dashboards.ALI.tab='done'" 
+              :class="dashboards.ALI.tab==='done'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-2 mx-auto w-full md:max-w-4xl p-4">
+      <!-- TODAY TASKS -->
+      <section x-show="dashboards.ALI.tab==='today'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">TODAY'S TASKS</h2>
+          <button @click="dashboards.ALI.showTodayModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>SELECT TASKS
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ALI.todayTasks.length === 0">
+          <div class="empty-state">
+            <i class="fas fa-inbox text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No tasks for today</h3>
+            <p class="text-slate-500">Select tasks from your active list to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ALI.todayTasks" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-warning ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4">
+                  <span class="cursor-pointer hover:text-primary transition-colors" 
+                        @click="dashboards.ALI.showDesc(job)" 
+                        x-text="job.description.slice(0,60)+'...'"></span>
+                </p>
+                
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center text-slate-500">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span class="font-medium">Deadline:</span>
+                    <span class="ml-1" x-text="job.deadline"></span>
+                  </div>
+                  
+                  <div class="flex items-center text-slate-500">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    <span class="font-medium">Revisions:</span>
+                    <span class="ml-1" x-text="job.revisions"></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ml-4 flex flex-col gap-2">
+                <button @click="dashboards.ALI.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="dashboards.ALI.tab==='active'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">ACTIVE TASKS</h2>
+          <button @click="dashboards.ALI.showAddModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>ADD TASK
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ALI.activeTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No active tasks</h3>
+            <p class="text-slate-500">Add a new task to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ALI.activeTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <input x-model="job.name" type="text" class="input-field text-lg font-bold uppercase" placeholder="Task name" />
+                  <button @click="dashboards.ALI.save()" class="ml-3 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-save text-xl"></i>
+                  </button>
+                </div>
+                
+                <textarea x-model="job.description" placeholder="Description" class="input-field h-24 mb-4"></textarea>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-plus mr-2"></i>CREATED DATE
+                    </label>
+                    <input type="date" x-model="job.created" class="input-field" />
+                  </div>
+                  
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                    </label>
+                    <input type="date" x-model="job.deadline" class="input-field" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-48 flex flex-col gap-3">
+                <button @click="dashboards.ALI.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+                
+                <div class="bg-slate-50 rounded-xl p-3">
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-sync-alt mr-2"></i>REVISIONS
+                  </label>
+                  <div class="flex items-center justify-between">
+                    <button @click="dashboards.ALI.changeRevisionById(job.id,-1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="text-xl font-bold px-4" x-text="job.revisions"></span>
+                    <button @click="dashboards.ALI.changeRevisionById(job.id,1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-money-bill-wave mr-2"></i>PAYMENT
+                  </label>
+                  <select x-model="job.payment" class="input-field">
+                    <option value="NOT PAID">NOT PAID</option>
+                    <option value="PAID">PAID</option>
+                    <option value="DON'T KNOW">DON'T KNOW</option>
+                  </select>
+                </div>
+                
+                <button @click="dashboards.ALI.removeById(job.id)" 
+                        class="btn btn-danger mt-2">
+                  <i class="fas fa-trash mr-2"></i>DELETE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="dashboards.ALI.tab==='done'" x-transition class="animate__animated animate__fadeIn">
+        <h2 class="text-2xl font-bold uppercase text-slate-800 mb-6">JOBS DONE</h2>
+        
+        <template x-if="dashboards.ALI.doneTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-check-circle text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No completed tasks yet</h3>
+            <p class="text-slate-500">Complete some tasks to see them here</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ALI.doneTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-success ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4" x-text="job.description"></p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="flex items-center">
+                    <i class="far fa-calendar-check text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DONE ON</div>
+                      <div class="font-medium" x-text="job.done"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="far fa-clock text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DEADLINE</div>
+                      <div class="font-medium" x-text="job.deadline"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="fas fa-sync-alt text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">REVISIONS</div>
+                      <div class="font-medium" x-text="job.revisions"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-40">
+                <button @click="dashboards.ALI.reviseAgain(job.id)" 
+                        class="btn btn-warning w-full">
+                  <i class="fas fa-redo mr-2"></i>REVISE AGAIN
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+    </main>
+
+    <!-- MODALS for ALI -->
+    <template x-if="dashboards.ALI.showAddModal || dashboards.ALI.showDescModal || dashboards.ALI.showTodayModal">
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <div class="modal-close" @click="dashboards.ALI.closeModals()">
+            <i class="fas fa-times"></i>
+          </div>
+          
+          <!-- ADD TASK -->
+          <template x-if="dashboards.ALI.showAddModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-plus-circle text-indigo-600 mr-3"></i>
+                ADD NEW TASK
+              </h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-plus mr-2"></i>CREATION DATE
+                  </label>
+                  <input type="text" x-bind:value="dashboards.ALI.newJob.created" readonly class="input-field bg-slate-100" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-heading mr-2"></i>TASK NAME
+                  </label>
+                  <input x-model="dashboards.ALI.newJob.name" type="text" placeholder="Job Name" class="input-field" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-align-left mr-2"></i>DESCRIPTION
+                  </label>
+                  <textarea x-model="dashboards.ALI.newJob.description" placeholder="Description" class="input-field h-32"></textarea>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                  </label>
+                  <input x-model="dashboards.ALI.newJob.deadline" type="date" class="input-field" />
+                </div>
+              </div>
+              
+              <div class="flex justify-end space-x-3 mt-8">
+                <button @click="dashboards.ALI.addJob()" class="btn btn-primary">
+                  <i class="fas fa-plus mr-2"></i>ADD TASK
+                </button>
+                <button @click="dashboards.ALI.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- DESCRIPTION POPUP -->
+          <template x-if="dashboards.ALI.showDescModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-align-left text-indigo-600 mr-3"></i>
+                DESCRIPTION
+              </h3>
+              
+              <div class="bg-slate-50 rounded-xl p-5 mb-6">
+                <p x-text="dashboards.ALI.descContent" class="whitespace-pre-line"></p>
+              </div>
+              
+              <button @click="dashboards.ALI.closeModals()" class="btn btn-primary w-full">
+                <i class="fas fa-check mr-2"></i>CLOSE
+              </button>
+            </div>
+          </template>
+
+          <!-- TODAY SELECT -->
+          <template x-if="dashboards.ALI.showTodayModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-calendar-day text-indigo-600 mr-3"></i>
+                SELECT TODAY'S TASKS
+              </h3>
+              
+              <div class="max-h-80 overflow-y-auto pr-2 mb-6">
+                <template x-for="job in dashboards.ALI.activeTasks()" :key="job.id">
+                  <div class="flex items-center mb-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer" 
+                       @click="dashboards.ALI.toggleSelection(job.id)">
+                    <input type="checkbox" :value="job.id" x-model="dashboards.ALI.selectedToday" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
+                    <div class="ml-3">
+                      <div class="font-medium text-slate-800" x-text="job.name"></div>
+                      <div class="text-sm text-slate-500" x-text="job.description.slice(0, 40) + '...'"></div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              
+              <div class="flex justify-end space-x-3">
+                <button @click="dashboards.ALI.addTodayTasks()" class="btn btn-primary">
+                  <i class="fas fa-check mr-2"></i>SELECT TASKS
+                </button>
+                <button @click="dashboards.ALI.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+
+
+
+
+
+
+
+
+
+<!-- ABDUL_REHMAN Dashboard - Similar structure with different color accents -->
+<div id="ABDUL_REHMAN_dashboard" class="dashboard-container" :class="{'dashboard-active': currentUser === 'ABDUL_REHMAN'}">
+<header class="dashboard-header flex flex-wrap justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mr-4">
+          <i class="fas fa-user-tie text-2xl text-indigo-600"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-white uppercase">ABDUL_REHMAN'S DASHBOARD</h1>
+      </div>
+      
+      <button @click="dashboards.ABDUL_REHMAN.toggleStatus()" 
+              class="px-5 py-2.5 rounded-xl shadow-lg transition-all flex items-center"
+              :class="dashboards.ABDUL_REHMAN.status === 'BUSY' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'">
+        <span class="status-indicator" :class="dashboards.ABDUL_REHMAN.status === 'BUSY' ? 'status-busy' : 'status-free'"></span>
+        <span class="font-semibold text-white" x-text="dashboards.ABDUL_REHMAN.status"></span>
+      </button>
+    </header>
+
+    <nav class="nav-tabs flex justify-center space-x-2">
+      <button @click="dashboards.ABDUL_REHMAN.tab='today'" 
+              :class="dashboards.ABDUL_REHMAN.tab==='today'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-calendar-day mr-2"></i>TODAY TASKS
+      </button>
+      <button @click="dashboards.ABDUL_REHMAN.tab='active'" 
+              :class="dashboards.ABDUL_REHMAN.tab==='active'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-tasks mr-2"></i>ACTIVE TASKS
+      </button>
+      <button @click="dashboards.ABDUL_REHMAN.tab='done'" 
+              :class="dashboards.ABDUL_REHMAN.tab==='done'?'nav-tab active':'nav-tab'">
+        <i class="fas fa-check-circle mr-2"></i>TASKS DONE
+      </button>
+    </nav>
+
+    <main class="flex-grow mt-2 mx-auto w-full md:max-w-4xl p-4">
+      <!-- TODAY TASKS -->
+      <section x-show="dashboards.ABDUL_REHMAN.tab==='today'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">TODAY'S TASKS</h2>
+          <button @click="dashboards.ABDUL_REHMAN.showTodayModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>SELECT TASKS
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ABDUL_REHMAN.todayTasks.length === 0">
+          <div class="empty-state">
+            <i class="fas fa-inbox text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No tasks for today</h3>
+            <p class="text-slate-500">Select tasks from your active list to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ABDUL_REHMAN.todayTasks" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-warning ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4">
+                  <span class="cursor-pointer hover:text-primary transition-colors" 
+                        @click="dashboards.ABDUL_REHMAN.showDesc(job)" 
+                        x-text="job.description.slice(0,60)+'...'"></span>
+                </p>
+                
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center text-slate-500">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span class="font-medium">Deadline:</span>
+                    <span class="ml-1" x-text="job.deadline"></span>
+                  </div>
+                  
+                  <div class="flex items-center text-slate-500">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    <span class="font-medium">Revisions:</span>
+                    <span class="ml-1" x-text="job.revisions"></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="ml-4 flex flex-col gap-2">
+                <button @click="dashboards.ABDUL_REHMAN.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- ACTIVE TASKS -->
+      <section x-show="dashboards.ABDUL_REHMAN.tab==='active'" x-transition class="animate__animated animate__fadeIn">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold uppercase text-slate-800">ACTIVE TASKS</h2>
+          <button @click="dashboards.ABDUL_REHMAN.showAddModal=true" 
+                  class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>ADD TASK
+          </button>
+        </div>
+        
+        <template x-if="dashboards.ABDUL_REHMAN.activeTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No active tasks</h3>
+            <p class="text-slate-500">Add a new task to get started</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ABDUL_REHMAN.activeTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <input x-model="job.name" type="text" class="input-field text-lg font-bold uppercase" placeholder="Task name" />
+                  <button @click="dashboards.ABDUL_REHMAN.save()" class="ml-3 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-save text-xl"></i>
+                  </button>
+                </div>
+                
+                <textarea x-model="job.description" placeholder="Description" class="input-field h-24 mb-4"></textarea>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-plus mr-2"></i>CREATED DATE
+                    </label>
+                    <input type="date" x-model="job.created" class="input-field" />
+                  </div>
+                  
+                  <div>
+                    <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                      <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                    </label>
+                    <input type="date" x-model="job.deadline" class="input-field" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-48 flex flex-col gap-3">
+                <button @click="dashboards.ABDUL_REHMAN.markDoneById(job.id)" 
+                        class="btn btn-success">
+                  <i class="fas fa-check mr-2"></i>MARK DONE
+                </button>
+                
+                <div class="bg-slate-50 rounded-xl p-3">
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-sync-alt mr-2"></i>REVISIONS
+                  </label>
+                  <div class="flex items-center justify-between">
+                    <button @click="dashboards.ABDUL_REHMAN.changeRevisionById(job.id,-1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="text-xl font-bold px-4" x-text="job.revisions"></span>
+                    <button @click="dashboards.ABDUL_REHMAN.changeRevisionById(job.id,1)" 
+                            class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-money-bill-wave mr-2"></i>PAYMENT
+                  </label>
+                  <select x-model="job.payment" class="input-field">
+                    <option value="NOT PAID">NOT PAID</option>
+                    <option value="PAID">PAID</option>
+                    <option value="DON'T KNOW">DON'T KNOW</option>
+                  </select>
+                </div>
+                
+                <button @click="dashboards.ABDUL_REHMAN.removeById(job.id)" 
+                        class="btn btn-danger mt-2">
+                  <i class="fas fa-trash mr-2"></i>DELETE
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <!-- TASKS DONE -->
+      <section x-show="dashboards.ABDUL_REHMAN.tab==='done'" x-transition class="animate__animated animate__fadeIn">
+        <h2 class="text-2xl font-bold uppercase text-slate-800 mb-6">JOBS DONE</h2>
+        
+        <template x-if="dashboards.ABDUL_REHMAN.doneTasks().length === 0">
+          <div class="empty-state">
+            <i class="fas fa-check-circle text-4xl"></i>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No completed tasks yet</h3>
+            <p class="text-slate-500">Complete some tasks to see them here</p>
+          </div>
+        </template>
+        
+        <template x-for="job in dashboards.ABDUL_REHMAN.doneTasks()" :key="job.id">
+          <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-5">
+              <div class="flex-1">
+                <div class="flex items-center mb-3">
+                  <h4 class="text-xl font-bold uppercase text-slate-800" x-text="job.name"></h4>
+                  <span class="badge badge-success ml-3" x-text="job.payment === 'PENDING' ? 'NOT PAID' : job.payment"></span>
+                </div>
+                
+                <p class="text-slate-600 mb-4" x-text="job.description"></p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="flex items-center">
+                    <i class="far fa-calendar-check text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DONE ON</div>
+                      <div class="font-medium" x-text="job.done"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="far fa-clock text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">DEADLINE</div>
+                      <div class="font-medium" x-text="job.deadline"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center">
+                    <i class="fas fa-sync-alt text-slate-500 mr-2"></i>
+                    <div>
+                      <div class="text-xs uppercase text-slate-500">REVISIONS</div>
+                      <div class="font-medium" x-text="job.revisions"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full md:w-40">
+                <button @click="dashboards.ABDUL_REHMAN.reviseAgain(job.id)" 
+                        class="btn btn-warning w-full">
+                  <i class="fas fa-redo mr-2"></i>REVISE AGAIN
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+    </main>
+
+    <!-- MODALS for ABDUL_REHMAN -->
+    <template x-if="dashboards.ABDUL_REHMAN.showAddModal || dashboards.ABDUL_REHMAN.showDescModal || dashboards.ABDUL_REHMAN.showTodayModal">
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <div class="modal-close" @click="dashboards.ABDUL_REHMAN.closeModals()">
+            <i class="fas fa-times"></i>
+          </div>
+          
+          <!-- ADD TASK -->
+          <template x-if="dashboards.ABDUL_REHMAN.showAddModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-plus-circle text-indigo-600 mr-3"></i>
+                ADD NEW TASK
+              </h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-plus mr-2"></i>CREATION DATE
+                  </label>
+                  <input type="text" x-bind:value="dashboards.ABDUL_REHMAN.newJob.created" readonly class="input-field bg-slate-100" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-heading mr-2"></i>TASK NAME
+                  </label>
+                  <input x-model="dashboards.ABDUL_REHMAN.newJob.name" type="text" placeholder="Job Name" class="input-field" />
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="fas fa-align-left mr-2"></i>DESCRIPTION
+                  </label>
+                  <textarea x-model="dashboards.ABDUL_REHMAN.newJob.description" placeholder="Description" class="input-field h-32"></textarea>
+                </div>
+                
+                <div>
+                  <label class="text-sm uppercase block mb-2 font-medium text-slate-600">
+                    <i class="far fa-calendar-check mr-2"></i>DEADLINE
+                  </label>
+                  <input x-model="dashboards.ABDUL_REHMAN.newJob.deadline" type="date" class="input-field" />
+                </div>
+              </div>
+              
+              <div class="flex justify-end space-x-3 mt-8">
+                <button @click="dashboards.ABDUL_REHMAN.addJob()" class="btn btn-primary">
+                  <i class="fas fa-plus mr-2"></i>ADD TASK
+                </button>
+                <button @click="dashboards.ABDUL_REHMAN.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- DESCRIPTION POPUP -->
+          <template x-if="dashboards.ABDUL_REHMAN.showDescModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-align-left text-indigo-600 mr-3"></i>
+                DESCRIPTION
+              </h3>
+              
+              <div class="bg-slate-50 rounded-xl p-5 mb-6">
+                <p x-text="dashboards.ABDUL_REHMAN.descContent" class="whitespace-pre-line"></p>
+              </div>
+              
+              <button @click="dashboards.ABDUL_REHMAN.closeModals()" class="btn btn-primary w-full">
+                <i class="fas fa-check mr-2"></i>CLOSE
+              </button>
+            </div>
+          </template>
+
+          <!-- TODAY SELECT -->
+          <template x-if="dashboards.ABDUL_REHMAN.showTodayModal">
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-calendar-day text-indigo-600 mr-3"></i>
+                SELECT TODAY'S TASKS
+              </h3>
+              
+              <div class="max-h-80 overflow-y-auto pr-2 mb-6">
+                <template x-for="job in dashboards.ABDUL_REHMAN.activeTasks()" :key="job.id">
+                  <div class="flex items-center mb-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer" 
+                       @click="dashboards.ABDUL_REHMAN.toggleSelection(job.id)">
+                    <input type="checkbox" :value="job.id" x-model="dashboards.ABDUL_REHMAN.selectedToday" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
+                    <div class="ml-3">
+                      <div class="font-medium text-slate-800" x-text="job.name"></div>
+                      <div class="text-sm text-slate-500" x-text="job.description.slice(0, 40) + '...'"></div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              
+              <div class="flex justify-end space-x-3">
+                <button @click="dashboards.ABDUL_REHMAN.addTodayTasks()" class="btn btn-primary">
+                  <i class="fas fa-check mr-2"></i>SELECT TASKS
+                </button>
+                <button @click="dashboards.ABDUL_REHMAN.closeModals()" class="btn btn-outline">
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+
+
+
+
+
+
+
+
+
+
   <!-- OWNER Dashboard -->
 <div
   id="OWNER_dashboard"
@@ -1190,6 +3076,52 @@
       </template>
     </div>
   </header>
+
+  <div class="max-w-6xl mx-auto px-4">
+  <div class="relative mb-6">
+    <input 
+      type="text" 
+      placeholder="Search tasks by name or description..." 
+      class="input-field pl-10 w-full"
+      x-model="searchTerm"
+    >
+    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+    
+    <!-- Search results dropdown -->
+    <template x-if="searchTerm.trim() !== ''">
+      <div class="absolute z-50 w-full bg-white rounded-lg shadow-lg mt-1 max-h-96 overflow-y-auto border border-slate-200">
+        <template x-if="searchResults().length === 0">
+          <p class="p-4 text-slate-500">No tasks found matching your search</p>
+        </template>
+        <template x-for="result in searchResults()" :key="`${result.emp}-${result.task.id}-${result.section}`">
+          <a 
+            href="#" 
+            class="block p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors"
+            @click.prevent="tab = result.section; $nextTick(() => scrollToTask(result.emp, result.task.id))"
+          >
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-slate-800" x-text="result.task.name"></h4>
+                <p class="text-slate-600 text-sm" x-text="result.task.description"></p>
+              </div>
+              <div class="flex flex-col items-end">
+                <span :class="`employee-badge employee-${result.emp.toLowerCase()}`" 
+                      x-text="result.emp" class="mb-1"></span>
+                <span class="badge" 
+                      :class="{
+                        'badge-primary': result.section==='today',
+                        'badge-warning': result.section==='active',
+                        'badge-success': result.section==='done'
+                      }"
+                      x-text="result.section"></span>
+              </div>
+            </div>
+          </a>
+        </template>
+      </div>
+    </template>
+  </div>
+</div>
 
   <!-- Tabs -->
   <nav class="nav-tabs flex justify-center space-x-2">
@@ -1224,7 +3156,8 @@
             </div>
           </template>
           <template x-for="job in todayTasks[emp]" :key="emp+'-'+job.id">
-            <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp md:flex justify-between items-start">
+            <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp md:flex justify-between items-start"
+     :id="`task-${emp}-${job.id}`">
               <div class="flex-1">
                 <h4 class="text-lg font-bold uppercase text-slate-800" x-text="job.name"></h4>
                 <p class="text-slate-600" x-text="job.description.slice(0,50)+(job.description.length>50?'...':'')"></p>
@@ -1313,7 +3246,8 @@
             </div>
           </template>
           <template x-for="job in activeTasks(emp)" :key="emp+'-act-'+job.id">
-            <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp md:flex justify-between items-start">
+            <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp md:flex justify-between items-start"
+     :id="`task-${emp}-${job.id}`">
               <div class="flex-1">
                 <h4 class="text-lg font-bold uppercase text-slate-800" x-text="job.name"></h4>
                 <p class="text-slate-600" x-text="job.description.slice(0,50)+(job.description.length>50?'...':'')"></p>
@@ -1402,7 +3336,8 @@
             </div>
           </template>
           <template x-for="job in doneTasks(emp)" :key="emp+'-done-'+job.id">
-            <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp md:flex justify-between items-start">
+            <div class="task-card p-5 mb-5 animate__animated animate__fadeInUp md:flex justify-between items-start"
+     :id="`task-${emp}-${job.id}`">
               <div class="flex-1">
                 <h4 class="text-lg font-bold uppercase text-slate-800" x-text="job.name"></h4>
                 <p class="text-slate-600" x-text="job.description"></p>
@@ -1443,6 +3378,7 @@
     }
 
     function employeeDashboard(name) {
+      
       return {
         name,
         tab: 'today',
@@ -1541,7 +3477,61 @@
    function ownerDashboard() {
     return {
       tab: 'today',
-      employees: ['ABUZAR', 'KAMRAN'],
+      searchTerm: '',
+
+      searchResults() {
+        const term = this.searchTerm.toLowerCase().trim();
+        if (!term) return [];
+        
+        const results = [];
+        const maxResults = 10;
+        
+        // Search in today tasks
+        for (const emp of this.employees) {
+          for (const task of this.todayTasks[emp] || []) {
+            if ((task.name && task.name.toLowerCase().includes(term)) || 
+                (task.description && task.description.toLowerCase().includes(term))) {
+              results.push({emp, task, section: 'today'});
+              if (results.length >= maxResults) return results;
+            }
+          }
+        }
+        
+        // Search in active tasks
+        for (const emp of this.employees) {
+          for (const task of this.activeTasks(emp)) {
+            if ((task.name && task.name.toLowerCase().includes(term)) || 
+                (task.description && task.description.toLowerCase().includes(term))) {
+              results.push({emp, task, section: 'active'});
+              if (results.length >= maxResults) return results;
+            }
+          }
+        }
+        
+        // Search in done tasks
+        for (const emp of this.employees) {
+          for (const task of this.doneTasks(emp)) {
+            if ((task.name && task.name.toLowerCase().includes(term)) || 
+                (task.description && task.description.toLowerCase().includes(term))) {
+              results.push({emp, task, section: 'done'});
+              if (results.length >= maxResults) return results;
+            }
+          }
+        }
+        
+        return results;
+      },
+
+      scrollToTask(emp, taskId) {
+        const element = document.getElementById(`task-${emp}-${taskId}`);
+        if (element) {
+          element.scrollIntoView({behavior: 'smooth', block: 'center'});
+          // Highlight temporarily
+          element.classList.add('ring-2', 'ring-blue-500');
+          setTimeout(() => element.classList.remove('ring-2', 'ring-blue-500'), 2000);
+        }
+      },
+      employees: ['ABUZAR', 'KAMRAN', 'MAQBOOL', 'ALI_ZULFIQAR', 'MUDASSIR', 'ALI', 'ABDUL_REHMAN'],
       tasks: {},
       todayTasks: {},
       status: {},
@@ -1599,12 +3589,17 @@
     dashboards: {
       ABUZAR: employeeDashboard('ABUZAR'),
       KAMRAN: employeeDashboard('KAMRAN'),
+      MAQBOOL: employeeDashboard('MAQBOOL'),
+      ALI_ZULFIQAR: employeeDashboard('ALI_ZULFIQAR'),
+      MUDASSIR: employeeDashboard('MUDASSIR'),
+      ALI: employeeDashboard('ALI'),
+      ABDUL_REHMAN: employeeDashboard('ABDUL_REHMAN'),
     },
     ownerData: ownerDashboard(),
     selectUser(user) {
       this.currentUser = user;
       this.showUserSelect = false;
-      if (user==='ABUZAR' || user==='KAMRAN') {
+      if (user==='ABUZAR' || user==='KAMRAN' || user==='MAQBOOL' || user==='ALI_ZULFIQAR' || user==='MUDASSIR' || user==='ALI' || user==='ABDUL_REHMAN') {
         // load their data on first selection
         this.dashboards[user].init();
       }
