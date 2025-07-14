@@ -3138,7 +3138,7 @@
       <template x-for="emp in employees" :key="emp">
         <div class="mb-8">
           <h3 class="section-heading flex items-center mb-4">
-            <span :class="`employee-badge employee-${emp.toLowerCase()}`" class="mr-2" x-text="emp"></span>
+            <span :class="`employee-badge employee-abuzar`" class="mr-2" x-text="emp"></span>
             Today's Tasks
             <span class="badge ml-3" :class="status[emp]==='BUSY' ? 'badge-danger' : 'badge-success'">
               <span x-text="status[emp]"></span>
@@ -3231,7 +3231,7 @@
       <template x-for="emp in employees" :key="emp">
         <div class="mb-8">
           <h3 class="section-heading flex items-center mb-4">
-            <span :class="`employee-badge employee-${emp.toLowerCase()}`" class="mr-2" x-text="emp"></span>
+            <span :class="`employee-badge employee-abuzar`" class="mr-2" x-text="emp"></span>
             Active Tasks
           </h3>
           <template x-if="activeTasks(emp).length===0">
@@ -3321,7 +3321,7 @@
       <template x-for="emp in employees" :key="emp">
         <div class="mb-8">
           <h3 class="section-heading flex items-center mb-4">
-            <span :class="`employee-badge employee-${emp.toLowerCase()}`" class="mr-2" x-text="emp"></span>
+            <span :class="`employee-badge employee-abuzar`" class="mr-2" x-text="emp"></span>
             Completed Tasks
           </h3>
           <template x-if="doneTasks(emp).length===0">
